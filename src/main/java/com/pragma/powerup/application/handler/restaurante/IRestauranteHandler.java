@@ -11,4 +11,8 @@ public interface IRestauranteHandler {
     void saveRestaurante(RestauranteRequestDto restauranteRequestDto);
 
     List<RestauranteResponseDto> getAllRestaurantes();
+
+    RestauranteResponseDto findByNombre(String nombre);
+
+
 }
