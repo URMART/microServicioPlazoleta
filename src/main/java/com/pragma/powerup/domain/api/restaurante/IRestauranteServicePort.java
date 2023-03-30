@@ -7,6 +7,6 @@ import java.util.List;
 public interface IRestauranteServicePort {
 
     void saveRestaurante(Restaurante restaurante);
-
+    Restaurante findByNombre(String nombre);
     List<Restaurante> getAllRestaurantes();
 }

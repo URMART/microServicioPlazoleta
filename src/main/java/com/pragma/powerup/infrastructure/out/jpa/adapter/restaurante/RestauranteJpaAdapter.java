@@ -34,4 +34,9 @@ public class RestauranteJpaAdapter implements IRestaurantePersistencePort {
 
         return  restauranteEntityMapper.toRestauranteModelList(entityList);
     }
+
+    @Override
+    public Restaurante findByNombre(String nombre) {
+        return restauranteEntityMapper.toRestauranteModel(restauranteRepository.findByNombre(nombre));
+    }
 }

@@ -34,4 +34,10 @@ public class RestauranteHandlerImp implements IRestauranteHandler {
     public List<RestauranteResponseDto> getAllRestaurantes() {
         return restauranteResponseMapper.toRestauranteDtoList(restauranteServicePort.getAllRestaurantes());
     }
+
+
+    @Override
+    public RestauranteResponseDto findByNombre(String nombre) {
+        return restauranteResponseMapper.toRestauranteDto(restauranteServicePort.findByNombre(nombre));
+    }
 }
