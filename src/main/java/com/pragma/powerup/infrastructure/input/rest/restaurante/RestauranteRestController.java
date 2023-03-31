@@ -3,6 +3,8 @@ package com.pragma.powerup.infrastructure.input.rest.restaurante;
 import com.pragma.powerup.application.dto.restaurante.request.RestauranteRequestDto;
 import com.pragma.powerup.application.dto.restaurante.response.RestauranteResponseDto;
 import com.pragma.powerup.application.handler.restaurante.IRestauranteHandler;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.client.UsuariosClient;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.modelsmicroservice.Usuarios;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +27,9 @@ public class RestauranteRestController {
 
     private final IRestauranteHandler restauranteHandler;
 
+    @Autowired
+    private UsuariosClient usuariosClient;
+
     @Operation(summary = "añadir un nuevo restaurante")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Object created", content = @Content),
@@ -31,8 +37,15 @@ public class RestauranteRestController {
     })
     @PostMapping("/auth/admin")
     public ResponseEntity<Void> saveObject(@Valid @RequestBody RestauranteRequestDto restauranteRequestDto) {
-        restauranteHandler.saveRestaurante(restauranteRequestDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        Usuarios usuarios = usuariosClient.findById(restauranteRequestDto.getIdPropietario());
+
+        if (usuarios!= null) {
+            restauranteHandler.saveRestaurante(restauranteRequestDto);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
     @Operation(summary = "listar restaurante")
