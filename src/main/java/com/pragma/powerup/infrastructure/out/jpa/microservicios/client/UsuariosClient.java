@@ -9,4 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface UsuariosClient {
     @GetMapping("/id/{id}/auth/admin")
     public Usuarios findById(@PathVariable Long id);
+    @GetMapping("/{nombre}/email/auth/admin")
+    public Usuarios findByEmail(@PathVariable String nombre);
 }

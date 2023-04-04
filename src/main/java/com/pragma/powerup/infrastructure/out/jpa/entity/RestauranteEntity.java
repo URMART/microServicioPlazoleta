@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -21,8 +22,9 @@ public class RestauranteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-    @NotEmpty
-    //@Pattern(regexp="^[^0-9]*[a-zA-Z]+[^0-9]*$", message="El nombre tiene el formato incorrecto ")
+
+    @NotBlank(message = "El campo nombre no puede estar vacío")
+    @Pattern(regexp = ".*[^0-9].*", message = "El campo nombre debe contener al menos un caracter no numérico")
     private String nombre;
     @NotEmpty
     private String direccion;

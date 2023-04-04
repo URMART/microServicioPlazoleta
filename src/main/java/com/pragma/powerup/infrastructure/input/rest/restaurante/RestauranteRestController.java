@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -56,6 +57,7 @@ public class RestauranteRestController {
             @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
     })
     @GetMapping("/auth/cliente")
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
     public ResponseEntity<List<RestauranteResponseDto>> getAllObjects() {
         return ResponseEntity.ok(restauranteHandler.getAllRestaurantes());
     }
