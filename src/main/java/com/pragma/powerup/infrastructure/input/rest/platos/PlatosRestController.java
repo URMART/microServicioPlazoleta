@@ -15,6 +15,7 @@ import com.pragma.powerup.application.mapper.platos.IPlatoRequestResponseDto;
 import com.pragma.powerup.application.mapper.restaurante.IRestauranteResponseMapper;
 import com.pragma.powerup.infrastructure.exception.NoDataFoundException;
 import com.pragma.powerup.infrastructure.exceptionhandler.ExceptionResponse;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.client.UsuariosClient;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,6 +39,8 @@ public class PlatosRestController {
     private final ICategoriaResponseMapper categoriaResponseMapper;
     private final IRestauranteResponseMapper restauranteResponseMapper;
     private final IPlatoRequestResponseDto platoRequestResponseDto;
+
+
 
 
 
