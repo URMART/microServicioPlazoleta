@@ -44,6 +44,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .antMatchers("/auth/**").permitAll()
+                                .antMatchers("/api/v1/restaurante/auth/cliente/**").permitAll()
                                 .anyRequest()
                                 .authenticated()
                 )
