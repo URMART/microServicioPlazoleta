@@ -1,6 +1,7 @@
 package com.pragma.powerup.application.handler.restaurante.imp;
 
 import com.pragma.powerup.application.dto.restaurante.request.RestauranteRequestDto;
+import com.pragma.powerup.application.dto.restaurante.response.RestauranteResponseClienteDto;
 import com.pragma.powerup.application.dto.restaurante.response.RestauranteResponseDto;
 import com.pragma.powerup.application.handler.restaurante.IRestauranteHandler;
 import com.pragma.powerup.application.mapper.restaurante.IRestauranteRequestMapper;
@@ -39,5 +40,10 @@ public class RestauranteHandlerImp implements IRestauranteHandler {
     @Override
     public RestauranteResponseDto findByNombre(String nombre) {
         return restauranteResponseMapper.toRestauranteDto(restauranteServicePort.findByNombre(nombre));
+    }
+
+    @Override
+    public List<RestauranteResponseClienteDto> getAllRestaurantesPaginados(int offset, int count) {
+        return restauranteResponseMapper.toRestauranteClienteDtoList(restauranteServicePort.getAllRestaurantesPaginados(offset, count));
     }
 }

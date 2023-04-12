@@ -1,5 +1,6 @@
 package com.pragma.powerup.application.mapper.restaurante;
 
+import com.pragma.powerup.application.dto.restaurante.response.RestauranteResponseClienteDto;
 import com.pragma.powerup.application.dto.restaurante.response.RestauranteResponseDto;
 import com.pragma.powerup.domain.model.Restaurante;
 import org.mapstruct.Mapper;
@@ -15,4 +16,10 @@ public interface IRestauranteResponseMapper {
     Restaurante toRestauranteModel(RestauranteResponseDto restauranteResponseDto);
 
     List<RestauranteResponseDto> toRestauranteDtoList(List<Restaurante> restauranteModelList);
+
+    List<RestauranteResponseClienteDto> toRestauranteClienteDtoList(List<Restaurante> restauranteModelList);
+
+
+
+
 }

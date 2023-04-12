@@ -16,4 +16,6 @@ public interface IPlatoResponseMapper {
     PlatoResponseDto toPlatosDto(Platos plato);
 
     List<PlatoResponseDto> toPlatosDtoList(List<Platos> platosModelList);
+
+    Platos toPlatoModel(PlatoResponseDto platoResponseDto);
 }

@@ -7,4 +7,5 @@ public interface IRestaurantePersistencePort {
     Restaurante saveRestaurante(Restaurante restaurante);
     Restaurante findByNombre(String nombre);
     List<Restaurante> getAllRestaurantes();
+    List<Restaurante> getAllRestaurantesPaginados(int page, int size);
 }

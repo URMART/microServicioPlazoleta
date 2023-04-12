@@ -33,9 +33,11 @@ public class RestauranteUseCase implements IRestauranteServicePort {
     @Override
     public List<Restaurante> getAllRestaurantes() {
         return restaurantePersistencePort.getAllRestaurantes();
+    }
 
-
-
+    @Override
+    public List<Restaurante> getAllRestaurantesPaginados(int page,int size) {
+        return restaurantePersistencePort.getAllRestaurantesPaginados(page,size);
     }
 
     @Override

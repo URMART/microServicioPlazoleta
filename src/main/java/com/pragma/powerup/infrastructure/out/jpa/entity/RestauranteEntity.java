@@ -25,6 +25,7 @@ public class RestauranteEntity {
 
     @NotBlank(message = "El campo nombre no puede estar vacío")
     @Pattern(regexp = ".*[^0-9].*", message = "El campo nombre debe contener al menos un caracter no numérico")
+    @Column(unique = true)
     private String nombre;
     @NotEmpty
     private String direccion;

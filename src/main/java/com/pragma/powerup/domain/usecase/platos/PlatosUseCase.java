@@ -5,6 +5,8 @@ import com.pragma.powerup.domain.exception.DomainException;
 import com.pragma.powerup.domain.model.Platos;
 import com.pragma.powerup.domain.spi.platos.IPlatosPersistencePort;
 
+import java.util.List;
+
 public class PlatosUseCase implements IPlatosServicePort {
 
     private final IPlatosPersistencePort platosPersistencePort;
@@ -38,5 +40,15 @@ public class PlatosUseCase implements IPlatosServicePort {
         }catch (DomainException e) {
             throw new DomainException("Error al buscar el plato en el dominio ");
         }
+    }
+
+    @Override
+    public Platos findById(Long id) {
+        return platosPersistencePort.findById(id);
+    }
+
+    @Override
+    public List<Platos> getAllPlatosPaginadosPorRestaurante(String nombreRestaurante, int page, int size) {
+        return platosPersistencePort.getAllPlatosPaginadosPorRestaurante(nombreRestaurante, page, size);
     }
 }
