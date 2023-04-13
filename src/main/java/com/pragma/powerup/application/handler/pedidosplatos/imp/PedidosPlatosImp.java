@@ -6,6 +6,7 @@ import com.pragma.powerup.application.handler.pedidosplatos.IPedidosPlatosHandle
 import com.pragma.powerup.application.mapper.pedidoplatos.IPedidoPlatosRequestMapper;
 import com.pragma.powerup.application.mapper.pedidoplatos.IPedidoPlatosResponseMapper;
 import com.pragma.powerup.domain.api.pedidosplatos.IPedidosPlatosServicePort;
+import com.pragma.powerup.domain.model.Estados;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +33,14 @@ public class PedidosPlatosImp implements IPedidosPlatosHandler {
     }
 
     @Override
-    public List<PedidoPlatoResponseDto> findAll() {
-        return pedidoPlatosResponseMapper.toPedidoPlatoResponseDtoList(pedidosPlatosServicePort.findAll());
+    public List<PedidoPlatoResponseDto> findAll(Long idPedido) {
+        return pedidoPlatosResponseMapper.toPedidoPlatoResponseDtoList(pedidosPlatosServicePort.findAll(idPedido));
+    }
+
+    @Override
+    public List<PedidoPlatoResponseDto> findAllPedidosPendientesPaginados(int page, int size, Estados estado, Long idRestaurante) {
+        return pedidoPlatosResponseMapper.toPedidoPlatoResponseDtoList(
+                pedidosPlatosServicePort.findAllPedidosPendientesPaginados(page, size, estado, idRestaurante)
+        );
     }
 }

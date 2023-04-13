@@ -58,10 +58,8 @@ public class ClienteControllerPedido {
 
         Usuarios cliente =  usuariosClient.findById(pedidoPlatoRequestGuardar.getIdCliente());
 
-
         RestauranteResponseDto restaurante = restauranteHandler
                 .findByNombre(pedidoPlatoRequestGuardar.getIdRestaurante().getNombre());
-
 
         PlatoResponseDto platoAGuardar = platosHandler.findById(pedidoPlatoRequestGuardar.getPlato().getId());
 

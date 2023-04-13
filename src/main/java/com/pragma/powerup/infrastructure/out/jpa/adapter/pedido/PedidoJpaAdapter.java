@@ -7,6 +7,8 @@ import com.pragma.powerup.infrastructure.out.jpa.entity.PedidoEntity;
 import com.pragma.powerup.infrastructure.out.jpa.mapper.pedido.IPedidoEntityMapper;
 import com.pragma.powerup.infrastructure.out.jpa.repository.pedido.IPedidoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +36,16 @@ public class PedidoJpaAdapter implements IPedidoPersistencePort {
     @Override
     public Pedido findPedidoCliente(Long idCliente, Estados estado) {
         return pedidoEntityMapper.toPedidoModel(pedidoRepository.findPedidoCliente(idCliente, estado));
+    }
+
+    @Override
+    public List<Pedido> findAllPedidosPendientesPaginados(int page, int size, Estados estado, Long idRestaurante) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return pedidoEntityMapper
+                .toPedidoModelListPage(
+                        pedidoRepository.findAllPedidosPendientesPaginados(estado,idRestaurante,pageable)
+                );
     }
 
 

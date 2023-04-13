@@ -5,6 +5,8 @@ import com.pragma.powerup.domain.model.Estados;
 import com.pragma.powerup.domain.model.Pedido;
 import com.pragma.powerup.domain.spi.pedido.IPedidoPersistencePort;
 
+import java.util.List;
+
 public class PedidoUseCase implements IPedidoServicePort {
 
     private final IPedidoPersistencePort pedidoPersistencePort;
@@ -30,7 +32,10 @@ public class PedidoUseCase implements IPedidoServicePort {
         return pedidoPersistencePort.findPedidoCliente(idCliente,estado);
     }
 
-
+    @Override
+    public List<Pedido> findAllPedidosPendientesPaginados(int page, int size, Estados estado, Long idRestaurante) {
+        return pedidoPersistencePort.findAllPedidosPendientesPaginados(page, size, estado, idRestaurante);
+    }
 
 
 }

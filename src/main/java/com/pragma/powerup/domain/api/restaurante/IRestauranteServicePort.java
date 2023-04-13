@@ -10,4 +10,6 @@ public interface IRestauranteServicePort {
     Restaurante findByNombre(String nombre);
     List<Restaurante> getAllRestaurantes();
     List<Restaurante> getAllRestaurantesPaginados(int page,int size);
+
+    Restaurante findById(Long id);
 }

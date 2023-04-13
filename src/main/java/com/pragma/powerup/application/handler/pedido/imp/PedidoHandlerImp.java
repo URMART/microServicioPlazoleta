@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -40,5 +42,13 @@ public class PedidoHandlerImp implements IPedidosHandler {
     @Override
     public PedidoResponseDto findById(Long id) {
         return pedidoResponseMapper.toPedidoDto(pedidoServicePort.findById(id));
+    }
+
+    @Override
+    public List<PedidoResponseDto> findAllPedidosPendientesPaginados
+            (int page, int size, Estados estado, Long idRestaurante)
+    {
+        return pedidoResponseMapper
+                .toPedidosDtoList(pedidoServicePort.findAllPedidosPendientesPaginados(page, size, estado, idRestaurante)) ;
     }
 }

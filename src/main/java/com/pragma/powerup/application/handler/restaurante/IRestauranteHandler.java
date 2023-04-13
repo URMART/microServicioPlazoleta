@@ -18,5 +18,7 @@ public interface IRestauranteHandler {
 
     List<RestauranteResponseClienteDto> getAllRestaurantesPaginados(int offset, int count);
 
+    RestauranteResponseDto findById(Long id);
+
 
 }

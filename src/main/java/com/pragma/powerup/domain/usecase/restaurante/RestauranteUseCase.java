@@ -41,6 +41,11 @@ public class RestauranteUseCase implements IRestauranteServicePort {
     }
 
     @Override
+    public Restaurante findById(Long id) {
+        return restaurantePersistencePort.findById(id);
+    }
+
+    @Override
     public Restaurante findByNombre(String nombre) {
         return restaurantePersistencePort.findByNombre(nombre);
     }

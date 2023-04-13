@@ -10,4 +10,6 @@ public interface IPedidoPersistencePort {
     Pedido savePedido(Pedido pedido);
     Pedido findById(Long id);
     Pedido findPedidoCliente(Long idCliente, Estados estado);
+
+    List<Pedido> findAllPedidosPendientesPaginados(int page,int size,Estados estado,Long idRestaurante);
 }

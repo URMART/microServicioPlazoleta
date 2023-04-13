@@ -14,15 +14,5 @@ public class PedidoResponseDto {
     private Long idCliente;
     private Long idChef;
 
-    @Override
-    public String toString() {
-        return "PedidoResponseDto{" +
-                "id=" + id +
-                ", fecha=" + fecha +
-                ", estado=" + estado +
-                ", idRestaurante=" + idRestaurante +
-                ", idCliente=" + idCliente +
-                ", idChef=" + idChef +
-                '}';
-    }
+
 }

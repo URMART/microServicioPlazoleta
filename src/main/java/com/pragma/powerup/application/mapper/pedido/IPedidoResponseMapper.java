@@ -1,6 +1,7 @@
 package com.pragma.powerup.application.mapper.pedido;
 
 
+import com.pragma.powerup.application.dto.pedido.request.PedidoRequestDto;
 import com.pragma.powerup.application.dto.pedido.response.PedidoResponseDto;
 
 import com.pragma.powerup.domain.model.Pedido;
@@ -18,5 +19,8 @@ public interface IPedidoResponseMapper {
     List<PedidoResponseDto> toPedidosDtoList(List<Pedido> pedidosModelList);
 
     Pedido toPedidoModel(PedidoResponseDto pedidoResponseDto);
+    PedidoRequestDto toPedidoRequestDto(PedidoResponseDto pedidoResponseDto);
+
+
 
 }

@@ -5,25 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-import java.time.LocalDateTime;
-
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Pedido {
+public class RestauranteEmpleado {
 
     private Long id;
-
-    private LocalDateTime fecha;
-
-    private Estados estado;
-
-    private Restaurante idRestaurante;
-    private Long idCliente;
-    private Long idChef;
-
-
+    private Long idRestaurante;
+    private Long idEmpleado;
 }

@@ -22,10 +22,10 @@ public class PedidosPlatosEntity implements Serializable {
     @Column(name = "id_pedidos_platos")
     private Long idPedidosPlatos;
 
-    @ManyToOne(cascade =  CascadeType.REMOVE)
+    @ManyToOne(cascade =  CascadeType.ALL)
     private PedidoEntity idPedido;
 
-    @ManyToOne(cascade =  CascadeType.REMOVE)
+    @ManyToOne(cascade =  CascadeType.ALL)
     private PlatosEntity idPlato;
     private Integer cantidad;
 

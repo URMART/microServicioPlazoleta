@@ -46,4 +46,9 @@ public class RestauranteHandlerImp implements IRestauranteHandler {
     public List<RestauranteResponseClienteDto> getAllRestaurantesPaginados(int offset, int count) {
         return restauranteResponseMapper.toRestauranteClienteDtoList(restauranteServicePort.getAllRestaurantesPaginados(offset, count));
     }
+
+    @Override
+    public RestauranteResponseDto findById(Long id) {
+        return restauranteResponseMapper.toRestauranteDto(restauranteServicePort.findById(id));
+    }
 }

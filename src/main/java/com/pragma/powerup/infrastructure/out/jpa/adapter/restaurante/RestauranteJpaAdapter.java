@@ -21,7 +21,9 @@ public class RestauranteJpaAdapter implements IRestaurantePersistencePort {
 
     @Override
     public Restaurante saveRestaurante(Restaurante restaurante) {
-        RestauranteEntity restauranteEntity= restauranteRepository.save(restauranteEntityMapper.toRestauranteEntity(restaurante));
+        RestauranteEntity restauranteEntity= restauranteRepository
+                .save(restauranteEntityMapper.toRestauranteEntity(restaurante));
+
         return restauranteEntityMapper.toRestauranteModel(restauranteEntity);
     }
 
@@ -40,11 +42,20 @@ public class RestauranteJpaAdapter implements IRestaurantePersistencePort {
     @Override
     public List<Restaurante> getAllRestaurantesPaginados(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return restauranteEntityMapper.toRestauranteModelListPa(restauranteRepository.findAllRestaurantesConPaginacion(pageable));
+        return restauranteEntityMapper
+                .toRestauranteModelListPa(restauranteRepository
+                .findAllRestaurantesConPaginacion(pageable));
+    }
+
+    @Override
+    public Restaurante findById(Long id) {
+        return restauranteEntityMapper
+                .toRestauranteModel(restauranteRepository.findById(id).orElseThrow());
     }
 
     @Override
     public Restaurante findByNombre(String nombre) {
-        return restauranteEntityMapper.toRestauranteModel(restauranteRepository.findByNombre(nombre));
+        return restauranteEntityMapper
+                .toRestauranteModel(restauranteRepository.findByNombre(nombre));
     }
 }
