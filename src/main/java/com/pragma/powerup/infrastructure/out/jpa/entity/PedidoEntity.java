@@ -30,7 +30,7 @@ public class PedidoEntity implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private Estados estado;
 
-    @ManyToOne(cascade =  CascadeType.REMOVE)
+    @ManyToOne(cascade =  CascadeType.ALL)
     private RestauranteEntity idRestaurante;
     private Long idCliente;
     @Column(nullable = true)

@@ -1,4 +1,4 @@
-package com.pragma.powerup.infrastructure.out.jpa.microservicios.modelsmicroservice;
+package com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.modelsmicroservice;
 
 
 import lombok.Data;

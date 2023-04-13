@@ -1,6 +1,6 @@
 package com.pragma.powerup.infrastructure.out.jpa.entity;
 
-import com.pragma.powerup.infrastructure.out.jpa.microservicios.modelsmicroservice.Usuarios;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.modelsmicroservice.Usuarios;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

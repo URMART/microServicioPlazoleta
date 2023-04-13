@@ -33,8 +33,8 @@ public class PedidoUseCase implements IPedidoServicePort {
     }
 
     @Override
-    public List<Pedido> findAllPedidosPendientesPaginados(int page, int size, Estados estado, Long idRestaurante) {
-        return pedidoPersistencePort.findAllPedidosPendientesPaginados(page, size, estado, idRestaurante);
+    public List<Pedido> findAllPedidosPendientesPaginados(int page, int size, Estados estado, Long idRestaurante,Long idChef) {
+        return pedidoPersistencePort.findAllPedidosPendientesPaginados(page, size, estado, idRestaurante,idChef);
     }
 
 

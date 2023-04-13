@@ -3,9 +3,9 @@ package com.pragma.powerup.infrastructure.input.rest.restaurante.admincontroller
 import com.pragma.powerup.application.dto.restaurante.request.RestauranteRequestDto;
 import com.pragma.powerup.application.handler.restaurante.IRestauranteHandler;
 import com.pragma.powerup.infrastructure.exception.NoDataFoundException;
-import com.pragma.powerup.infrastructure.out.jpa.microservicios.client.UsuariosClient;
-import com.pragma.powerup.infrastructure.out.jpa.microservicios.modelsmicroservice.Rol;
-import com.pragma.powerup.infrastructure.out.jpa.microservicios.modelsmicroservice.Usuarios;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.client.UsuariosClient;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.modelsmicroservice.Rol;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.modelsmicroservice.Usuarios;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

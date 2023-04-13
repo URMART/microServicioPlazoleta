@@ -1,7 +1,7 @@
 package com.pragma.powerup.infrastructure.security.userDetails;
 
-import com.pragma.powerup.infrastructure.out.jpa.microservicios.client.UsuariosClient;
-import com.pragma.powerup.infrastructure.out.jpa.microservicios.modelsmicroservice.Usuarios;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.client.UsuariosClient;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.modelsmicroservice.Usuarios;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

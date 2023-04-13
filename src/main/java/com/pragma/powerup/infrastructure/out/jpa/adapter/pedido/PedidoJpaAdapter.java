@@ -9,6 +9,7 @@ import com.pragma.powerup.infrastructure.out.jpa.repository.pedido.IPedidoReposi
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,12 +40,13 @@ public class PedidoJpaAdapter implements IPedidoPersistencePort {
     }
 
     @Override
-    public List<Pedido> findAllPedidosPendientesPaginados(int page, int size, Estados estado, Long idRestaurante) {
+    public List<Pedido> findAllPedidosPendientesPaginados(
+            int page, int size, Estados estado, Long idRestaurante, Long idChef) {
         Pageable pageable = PageRequest.of(page, size);
 
         return pedidoEntityMapper
                 .toPedidoModelListPage(
-                        pedidoRepository.findAllPedidosPendientesPaginados(estado,idRestaurante,pageable)
+                        pedidoRepository.findAllPedidosPendientesPaginados(estado,idRestaurante,idChef,pageable)
                 );
     }
 

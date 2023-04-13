@@ -1,7 +1,7 @@
-package com.pragma.powerup.infrastructure.out.jpa.microservicios.client;
+package com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.client;
 
-import com.pragma.powerup.infrastructure.out.jpa.microservicios.modelsmicroservice.Rol;
-import com.pragma.powerup.infrastructure.out.jpa.microservicios.modelsmicroservice.Usuarios;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.modelsmicroservice.Rol;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.modelsmicroservice.Usuarios;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

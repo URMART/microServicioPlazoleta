@@ -1,7 +1,7 @@
 package com.pragma.powerup.infrastructure.security.jwtAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pragma.powerup.infrastructure.out.jpa.microservicios.modelsmicroservice.Usuarios;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.modelsmicroservice.Usuarios;
 import com.pragma.powerup.infrastructure.security.authCredentials.AuthCredentials;
 import com.pragma.powerup.infrastructure.security.tokenConfig.TokenUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

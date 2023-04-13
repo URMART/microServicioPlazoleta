@@ -19,9 +19,10 @@ public interface IPedidoRepository extends JpaRepository<PedidoEntity,Long> {
    @Query(value = "SELECT p FROM PedidoEntity AS p where p.idCliente = ?1 and  p.estado = ?2 ")
    PedidoEntity findPedidoCliente(Long idCliente, Estados estado);
 
-   @Query(value = "SELECT p FROM PedidoEntity  p where p.estado = :estado and p.idRestaurante.id = :idRestaurante ")
+   @Query(value = "SELECT p FROM PedidoEntity  p where p.estado = :estado and p.idRestaurante.id = :idRestaurante " +
+           "and p.idChef = :idChef")
    Page<PedidoEntity> findAllPedidosPendientesPaginados(
-           @Param("estado")Estados estado, @Param("idRestaurante") Long idRestaurante, Pageable pageable
+           @Param("estado")Estados estado, @Param("idRestaurante") Long idRestaurante,@Param("idChef") Long idChef, Pageable pageable
    );
 
 

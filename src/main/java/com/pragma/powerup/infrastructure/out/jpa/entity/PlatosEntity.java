@@ -38,9 +38,9 @@ public class PlatosEntity {
     private Boolean activo;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private CategoriaEntity categoria;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private RestauranteEntity restaurante;
 }

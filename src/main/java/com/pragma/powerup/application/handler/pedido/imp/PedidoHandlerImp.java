@@ -46,9 +46,9 @@ public class PedidoHandlerImp implements IPedidosHandler {
 
     @Override
     public List<PedidoResponseDto> findAllPedidosPendientesPaginados
-            (int page, int size, Estados estado, Long idRestaurante)
+            (int page, int size, Estados estado, Long idRestaurante,Long idChef)
     {
         return pedidoResponseMapper
-                .toPedidosDtoList(pedidoServicePort.findAllPedidosPendientesPaginados(page, size, estado, idRestaurante)) ;
+                .toPedidosDtoList(pedidoServicePort.findAllPedidosPendientesPaginados(page, size, estado, idRestaurante,idChef)) ;
     }
 }
