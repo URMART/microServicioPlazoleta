@@ -11,4 +11,5 @@ public interface IPedidosPlatosPersistencePort {
     PedidosPlatos findById(Long id);
     List<PedidosPlatos> findAll(Long idPedido);
     List<PedidosPlatos> findAllPedidosPendientesPaginados(int page, int size, Estados estado, Long idRestaurante);
+    void DeletePedidoPlato(Long idPedido);
 }

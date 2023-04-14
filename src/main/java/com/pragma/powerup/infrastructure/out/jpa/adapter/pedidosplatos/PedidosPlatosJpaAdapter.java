@@ -48,4 +48,9 @@ public class PedidosPlatosJpaAdapter implements IPedidosPlatosPersistencePort {
                 pedidosPlatosRepository.findAllPedidosPendientesPaginados(estado, idRestaurante, pageable)
         );
     }
+
+    @Override
+    public void DeletePedidoPlato(Long idPedido) {
+        pedidosPlatosRepository.deleteById(idPedido);
+    }
 }

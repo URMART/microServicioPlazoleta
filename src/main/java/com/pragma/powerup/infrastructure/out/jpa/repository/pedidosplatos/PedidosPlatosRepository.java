@@ -18,7 +18,7 @@ public interface PedidosPlatosRepository extends JpaRepository<PedidosPlatosEnti
 
     Optional<PedidosPlatosEntity> findById(Long id);
 
-    @Query(value = "SELECT p.idPlato.nombre " +
+    @Query(value = "SELECT p " +
             "FROM PedidosPlatosEntity p where p.idPedido.id = :idPedido")
     List<PedidosPlatosEntity> findAll(@Param("idPedido") Long idPedido);
 
@@ -27,6 +27,5 @@ public interface PedidosPlatosRepository extends JpaRepository<PedidosPlatosEnti
     Page<PedidosPlatosEntity> findAllPedidosPendientesPaginados(
             @Param("estado") Estados estado, @Param("idRestaurante") Long idRestaurante, Pageable pageable
     );
-
 
 }

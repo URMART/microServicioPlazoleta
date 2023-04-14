@@ -17,4 +17,6 @@ public interface IPedidosHandler {
     PedidoResponseDto  findById(Long id);
 
     List<PedidoResponseDto> findAllPedidosPendientesPaginados(int page, int size, Estados estado, Long idRestaurante,Long idChef);
+
+    void DeletePedido(Long idPedido);
 }

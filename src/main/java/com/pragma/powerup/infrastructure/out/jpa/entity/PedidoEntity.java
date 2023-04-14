@@ -30,7 +30,7 @@ public class PedidoEntity implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private Estados estado;
 
-    @ManyToOne(cascade =  CascadeType.ALL)
+    @ManyToOne(cascade =  CascadeType.MERGE)
     private RestauranteEntity idRestaurante;
     private Long idCliente;
     @Column(nullable = true)
@@ -43,15 +43,5 @@ public class PedidoEntity implements Serializable {
         fecha = LocalDateTime.now();
     }
 
-    @Override
-    public String toString() {
-        return "PedidoEntity{" +
-                "id=" + id +
-                ", fecha=" + fecha +
-                ", estado=" + estado +
-                ", idRestaurante=" + idRestaurante +
-                ", idCliente=" + idCliente +
-                ", idChef=" + idChef +
-                '}';
-    }
+
 }

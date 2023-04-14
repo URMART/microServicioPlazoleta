@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,10 +24,10 @@ public class PedidosPlatosEntity implements Serializable {
     @Column(name = "id_pedidos_platos")
     private Long idPedidosPlatos;
 
-    @ManyToOne(cascade =  CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private PedidoEntity idPedido;
 
-    @ManyToOne(cascade =  CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private PlatosEntity idPlato;
     private Integer cantidad;
 

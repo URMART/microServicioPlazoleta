@@ -49,4 +49,9 @@ public class PedidosPlatosUseCase implements IPedidosPlatosServicePort {
     public List<PedidosPlatos> findAllPedidosPendientesPaginados(int page, int size, Estados estado, Long idRestaurante) {
         return platosPersistencePort.findAllPedidosPendientesPaginados(page, size, estado, idRestaurante);
     }
+
+    @Override
+    public void DeletePedidoPlato(Long idPedido) {
+        platosPersistencePort.DeletePedidoPlato(idPedido);
+    }
 }

@@ -9,10 +9,10 @@ spring:
 
 TWILIO:
   ACCOUNT:
-        SID: AC5dc7c8740cd972f8c255330f45bbdf40
+        SID: AC16f9f1ec1e05e9ffbc18e77a7bd8145b
 
-        TOKEN: 6beba4164023001a3d4201ef30058591
+        TOKEN: c7a25512600be6978bc858ec801a6a53
 
   OUTGOING:
         SMS:
-            NUMBER: +15076237507
+            NUMBER: +15075644640

@@ -15,6 +15,8 @@ public interface IPedidosPlatosServicePort {
 
     List<PedidosPlatos> findAllPedidosPendientesPaginados(int page, int size, Estados estado, Long idRestaurante);
 
+    void DeletePedidoPlato(Long idPedido);
+
 
 
 }

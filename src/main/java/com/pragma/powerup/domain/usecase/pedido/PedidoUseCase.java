@@ -17,7 +17,7 @@ public class PedidoUseCase implements IPedidoServicePort {
 
     @Override
     public Pedido savePedido(Pedido pedido) {
-        System.out.println("pedido  en use case = " + pedido);
+
        return pedidoPersistencePort.savePedido(pedido);
     }
 
@@ -35,6 +35,11 @@ public class PedidoUseCase implements IPedidoServicePort {
     @Override
     public List<Pedido> findAllPedidosPendientesPaginados(int page, int size, Estados estado, Long idRestaurante,Long idChef) {
         return pedidoPersistencePort.findAllPedidosPendientesPaginados(page, size, estado, idRestaurante,idChef);
+    }
+
+    @Override
+    public void DeletePedido(Long idPedido) {
+        pedidoPersistencePort.DeletePedido(idPedido);
     }
 
 

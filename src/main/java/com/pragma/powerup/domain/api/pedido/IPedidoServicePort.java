@@ -12,4 +12,6 @@ public interface IPedidoServicePort {
     Pedido findById(Long id);
     Pedido findPedidoCliente(Long idCliente, Estados estado );
     List<Pedido> findAllPedidosPendientesPaginados(int page,int size,Estados estado,Long idRestaurante,Long idChef);
+
+    void DeletePedido(Long idPedido);
 }

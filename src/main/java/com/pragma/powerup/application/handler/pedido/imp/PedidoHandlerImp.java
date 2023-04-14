@@ -51,4 +51,9 @@ public class PedidoHandlerImp implements IPedidosHandler {
         return pedidoResponseMapper
                 .toPedidosDtoList(pedidoServicePort.findAllPedidosPendientesPaginados(page, size, estado, idRestaurante,idChef)) ;
     }
+
+    @Override
+    public void DeletePedido(Long idPedido) {
+        pedidoServicePort.DeletePedido(idPedido);
+    }
 }

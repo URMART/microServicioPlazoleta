@@ -43,4 +43,9 @@ public class PedidosPlatosImp implements IPedidosPlatosHandler {
                 pedidosPlatosServicePort.findAllPedidosPendientesPaginados(page, size, estado, idRestaurante)
         );
     }
+
+    @Override
+    public void eliminarPedidoPlato(Long idPedido) {
+        pedidosPlatosServicePort.DeletePedidoPlato(idPedido);
+    }
 }

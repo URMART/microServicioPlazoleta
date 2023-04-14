@@ -50,5 +50,10 @@ public class PedidoJpaAdapter implements IPedidoPersistencePort {
                 );
     }
 
+    @Override
+    public void DeletePedido(Long idPedido) {
+        pedidoRepository.deleteById(idPedido);
+    }
+
 
 }
