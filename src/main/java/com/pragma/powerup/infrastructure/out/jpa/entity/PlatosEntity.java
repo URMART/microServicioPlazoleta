@@ -25,6 +25,7 @@ public class PlatosEntity {
     @Id
     private Long id;
     @NotEmpty
+    @Column(unique = true)
     private String nombre;
     @NotEmpty
     private String descripcion;
@@ -38,9 +39,9 @@ public class PlatosEntity {
     private Boolean activo;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private CategoriaEntity categoria;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private RestauranteEntity restaurante;
 }

@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/platos/auth/propietario")
+@RequestMapping("/api/v1/plazoleta/auth/propietario")
 @RequiredArgsConstructor
 public class PlatosRestController {
 
@@ -51,47 +51,49 @@ public class PlatosRestController {
             @ApiResponse(responseCode = "201", description = "Object created", content = @Content),
             @ApiResponse(responseCode = "409", description = "Object already exists", content = @Content)
     })
-    @PostMapping("/{id}")
+    @PostMapping("/crearPlato/{id}")
     @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
     public ResponseEntity<Void> savePlato(@Valid @RequestBody PlatoRequestDto platoRequestDto,@PathVariable Long id ) {
-        Usuarios usuario = usuariosClient.findById(id);
-        RestauranteResponseDto restaurante = restauranteHandler.findByNombre(platoRequestDto.getRestaurante().getNombre());
-        CategoriaResponseDto categoria = categoriaHandler.findByNombre(platoRequestDto.getCategoria().getNombre());
+        try {
+
+            Usuarios usuario = usuariosClient.findById(id);
+            RestauranteResponseDto restaurante = restauranteHandler.findByNombre(platoRequestDto.getRestaurante().getNombre());
+            CategoriaResponseDto categoria = categoriaHandler.findByNombre(platoRequestDto.getCategoria().getNombre());
+
+            if (categoria == null || restaurante == null ){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            if(restaurante.getIdPropietario() == usuario.getId()){
+                platoRequestDto.setCategoria(categoriaResponseMapper.toCategoriaModel(categoria));
+                platoRequestDto.setRestaurante(restauranteResponseMapper.toRestauranteModel(restaurante));
+                platosHandler.savePlato(platoRequestDto);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
 
 
-        if (categoria == null || restaurante == null || usuario == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return  new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
-        if(restaurante.getIdPropietario()== usuario.getId()){
-            platoRequestDto.setCategoria(categoriaResponseMapper.toCategoriaModel(categoria));
-            platoRequestDto.setRestaurante(restauranteResponseMapper.toRestauranteModel(restaurante));
-            platosHandler.savePlato(platoRequestDto);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
+
         return new ResponseEntity<>(HttpStatus.CONFLICT);
-
-
 
     }
 
-    @Operation(summary = "añadir un nuevo plato")
+    @Operation(summary = "actualizar un nuevo plato")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Object created", content = @Content),
             @ApiResponse(responseCode = "409", description = "Object already exists", content = @Content)
     })
-    @PutMapping("/{id}/{nombre}")
+    @PutMapping("/actualizarPlato/{id}/{nombre}")
     @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
     public ResponseEntity<Void> putPlato(@Valid @PathVariable String nombre,@PathVariable("id") Long idPropietario ,@RequestBody PlatoPutRequestDto platoPutRequestDto) {
-        Usuarios usuario = usuariosClient.findById(idPropietario);
-        PlatoResponseDto plato = platosHandler.findByNombre(nombre);
-        Long idPropietarioRestaurante = plato.getRestaurante().getIdPropietario();
-
 
         try{
-            if ( plato == null || usuario == null  ){
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
-            }
+            Usuarios usuario = usuariosClient.findById(idPropietario);
+            PlatoResponseDto plato = platosHandler.findByNombre(nombre);
+            Long idPropietarioRestaurante = plato.getRestaurante().getIdPropietario();
 
             if(idPropietarioRestaurante == usuario.getId()){
                 plato.setDescripcion(platoPutRequestDto.getDescripcion());
@@ -102,45 +104,38 @@ public class PlatosRestController {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
 
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }catch (Exception e){ return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE);}
 
-        }catch (Exception e){ return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);}
-
-
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 
     }
-    @Operation(summary = "añadir un nuevo plato")
+
+
+
+    @Operation(summary = "habilitar o deshabilitar un plato")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Object created", content = @Content),
             @ApiResponse(responseCode = "409", description = "Object already exists", content = @Content)
     })
-    @PutMapping("/{id}/{nombreplato}/habilitar")
+    @PutMapping("/habilitarODeshabilitarPlato/{id}/{nombreplato}")
     @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
     public ResponseEntity<Void> habilitarODeshabilitarPlato(@Valid @PathVariable String nombreplato,
                                                             @PathVariable("id") Long idPropietario ,
                                                             @RequestBody PlatoPutHabilitadoRequest platoPutHabilitadoRequest)
     {
-        Usuarios usuario = usuariosClient.findById(idPropietario);
-        PlatoResponseDto plato = platosHandler.findByNombre(nombreplato);
-        Long idPropietarioRestaurante = plato.getRestaurante().getIdPropietario();
-
 
         try{
-            if ( plato == null || usuario == null  ){
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
-            }
-
+            Usuarios usuario = usuariosClient.findById(idPropietario);
+            PlatoResponseDto plato = platosHandler.findByNombre(nombreplato);
+            Long idPropietarioRestaurante = plato.getRestaurante().getIdPropietario();
             if(idPropietarioRestaurante == usuario.getId()){
                 plato.setActivo(platoPutHabilitadoRequest.getActivo());
                 platosHandler.savePlato(platoRequestResponseDto.toRequestDto(plato));
                 return new ResponseEntity<>(HttpStatus.OK);
             }
+        }catch (Exception e){ return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE); }
 
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-
-        }catch (Exception e){ throw  new NoDataFoundException();}
-
-
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 
     }
 

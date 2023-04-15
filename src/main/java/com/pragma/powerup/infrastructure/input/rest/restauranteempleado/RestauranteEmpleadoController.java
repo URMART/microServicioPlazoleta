@@ -22,25 +22,31 @@ public class RestauranteEmpleadoController {
     private final IRestauranteEmpleadoHandler restauranteEmpleadoHandler;
     private final IRestauranteHandler restauranteHandler;
     private final UsuariosClient  usuariosClient;
-    @PostMapping("/{id}")
+    @PostMapping("/agregarEmpleado/{id}")
     @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
     public ResponseEntity<Void> saveRestauranteEmpleado(@Valid @PathVariable Long id, @RequestBody RestauranteEmpleadoRequestDto empleado){
 
-        Usuarios empleadoEncontrado = usuariosClient.findById(empleado.getIdEmpleado());
-        Usuarios propietario = usuariosClient.findById(id);
-        RestauranteResponseDto restaurante = restauranteHandler.findById(empleado.getIdRestaurante());
+        try{
+            Usuarios empleadoEncontrado = usuariosClient.findById(empleado.getIdEmpleado());
+            Usuarios propietario = usuariosClient.findById(id);
+            RestauranteResponseDto restaurante = restauranteHandler.findById(empleado.getIdRestaurante());
 
-        if(empleadoEncontrado == null   || restaurante  == null || propietario == null)
-        {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            if(restaurante  == null || propietario == null)
+            {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            if(propietario.getId() == restaurante.getIdPropietario()){
+                restauranteEmpleadoHandler.saveRestauranteEmpleado(empleado);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+
+
+
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-
-        if(propietario.getId() == restaurante.getIdPropietario()){
-            restauranteEmpleadoHandler.saveRestauranteEmpleado(empleado);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
 

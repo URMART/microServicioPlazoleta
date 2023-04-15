@@ -17,9 +17,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/restaurante/auth/admin")
+@RequestMapping("/api/v1/plazoleta/auth/admin")
 @RequiredArgsConstructor
 public class RestauranteRestController {
 
@@ -33,21 +34,23 @@ public class RestauranteRestController {
             @ApiResponse(responseCode = "201", description = "Object created", content = @Content),
             @ApiResponse(responseCode = "409", description = "Object already exists", content = @Content)
     })
-    @PostMapping()
+    @PostMapping("/crearRestaurante")
     @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<Void> saveRestaurante(@Valid @RequestBody RestauranteRequestDto restauranteRequestDto) {
-        Usuarios usuarios = usuariosClient.findById(restauranteRequestDto.getIdPropietario());
-
-        if (usuarios!= null) {
-            restauranteHandler.saveRestaurante(restauranteRequestDto);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-
+        try {
+            Usuarios usuarios = usuariosClient.findById(restauranteRequestDto.getIdPropietario());
+        }catch (Exception e){
+            return  new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+
+        restauranteHandler.saveRestaurante(restauranteRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
 
     }
 
-    @PostMapping("/createPropietario")
+    @PostMapping("/crearPropietario")
     @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     public ResponseEntity<Void> savePropietario(@Valid @RequestBody Usuarios  usuarios) {
 

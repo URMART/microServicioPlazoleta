@@ -51,18 +51,22 @@ public class EmpleadoPedidoController {
             @RequestParam("size") int size)
     {
 
+        try{
+            RestauranteEmpleadoResponseDto restauranteEmpleado = restauranteEmpleadoHandler.findById(idEmpleado);
 
 
-        RestauranteEmpleadoResponseDto restauranteEmpleado = restauranteEmpleadoHandler.findById(idEmpleado);
-
-
-           if(restauranteEmpleado == null  || estado == null){
-               throw  new NoDataFoundException();
-           }
+            if(restauranteEmpleado == null  || estado == null){
+                throw  new NoDataFoundException();
+            }
 
             return ResponseEntity.ok(pedidosPlatosHandler
                     .findAllPedidosPendientesPaginados(
                             page,size, estado,restauranteEmpleado.getIdRestaurante().longValue()));
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+
     }
 
 
@@ -75,32 +79,36 @@ public class EmpleadoPedidoController {
             @RequestParam("size") int size,
             @RequestBody PedidoRequestAsignarChefDto requestDto)
     {
+        try {
+            RestauranteEmpleadoResponseDto restauranteEmpleado = restauranteEmpleadoHandler.findById(idEmpleado);
 
-        RestauranteEmpleadoResponseDto restauranteEmpleado = restauranteEmpleadoHandler.findById(idEmpleado);
-
-        if(restauranteEmpleado == null  || estado == null){
-            throw  new NoDataFoundException();
-        }
-
-        List<PedidoPlatoResponseDto> pedidos = pedidosPlatosHandler
-                .findAllPedidosPendientesPaginados(
-                        page,size, estado,restauranteEmpleado.getIdRestaurante().longValue());
-
-
-        for(PedidoPlatoResponseDto pedido : pedidos)
-        {
-            for (Long id : requestDto.getIdPedido())
-            {
-                if(pedido.getIdPedido().getId() == id){
-                    pedido.getIdPedido().setIdChef(idEmpleado);
-                    pedido.getIdPedido().setEstado(requestDto.getEstado());
-                    pedidosPlatosHandler.savePedidosPlatos(
-                            pedidoPlatosResponseMapper.toPedidoPlatoRequestDto(pedido));
-                }
+            if(restauranteEmpleado == null  || estado == null){
+                throw  new NoDataFoundException();
             }
 
+            List<PedidoPlatoResponseDto> pedidos = pedidosPlatosHandler
+                    .findAllPedidosPendientesPaginados(
+                            page,size, estado,restauranteEmpleado.getIdRestaurante().longValue());
+
+
+            for(PedidoPlatoResponseDto pedido : pedidos)
+            {
+                for (Long id : requestDto.getIdPedido())
+                {
+                    if(pedido.getIdPedido().getId() == id){
+                        pedido.getIdPedido().setIdChef(idEmpleado);
+                        pedido.getIdPedido().setEstado(requestDto.getEstado());
+                        pedidosPlatosHandler.savePedidosPlatos(
+                                pedidoPlatosResponseMapper.toPedidoPlatoRequestDto(pedido));
+                    }
+                }
+
+            }
+            return ResponseEntity.ok(pedidos);
+        }catch   (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-        return ResponseEntity.ok(pedidos);
+
     }
 
     @PutMapping("/cambiarEstado/enviarSms/{idEmpleado}/{estado}")
@@ -111,37 +119,42 @@ public class EmpleadoPedidoController {
                                                               @RequestParam("size") int size,
                                                               @RequestBody PedidoRequestCambiarEstadoYSms requestDto)
     {
-        String mensaje = "Su pedido esta listo, este es su codigo de reclamo  :" + Codigo.POWERUPV2;
+        try{
+            String mensaje = "Su pedido esta listo, este es su codigo de reclamo  :" + Codigo.POWERUPV2;
 
-        RestauranteEmpleadoResponseDto restauranteEmpleado = restauranteEmpleadoHandler.findById(idEmpleado);
+            RestauranteEmpleadoResponseDto restauranteEmpleado = restauranteEmpleadoHandler.findById(idEmpleado);
 
-        Usuarios empleado = usuariosClient.findById(idEmpleado);
-
-
-        if(restauranteEmpleado == null  || estado == null || empleado == null){
-            throw  new NoDataFoundException();
-        }
-
-        List<PedidoResponseDto> pedidos = pedidosHandler.findAllPedidosPendientesPaginados(
-                page,size,estado,restauranteEmpleado.getIdRestaurante(),empleado.getId()
-        );
+            Usuarios empleado = usuariosClient.findById(idEmpleado);
 
 
-        for(PedidoResponseDto pedido : pedidos)
-        {
-            for (Long id : requestDto.getIdPedido())
+            if(restauranteEmpleado == null  || estado == null || empleado == null){
+                throw  new NoDataFoundException();
+            }
+
+            List<PedidoResponseDto> pedidos = pedidosHandler.findAllPedidosPendientesPaginados(
+                    page,size,estado,restauranteEmpleado.getIdRestaurante(),empleado.getId()
+            );
+
+
+            for(PedidoResponseDto pedido : pedidos)
             {
-                if(pedido.getId() == id){
-                    pedido.setEstado(Estados.LISTO);
-                    pedidosHandler.savePedido(
-                            pedidoResponseMapper.toPedidoRequestDto(pedido));
-                    smsService.sendSms("+573245768037",mensaje);
+                for (Long id : requestDto.getIdPedido())
+                {
+                    if(pedido.getId() == id){
+                        pedido.setEstado(Estados.LISTO);
+                        pedidosHandler.savePedido(
+                                pedidoResponseMapper.toPedidoRequestDto(pedido));
+                        smsService.sendSms("+573245768037",mensaje);
 
+                    }
                 }
             }
+            return ResponseEntity.ok(pedidos);
+
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return ResponseEntity.ok(pedidos);
     }
 
 

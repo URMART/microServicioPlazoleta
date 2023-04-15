@@ -16,28 +16,28 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/restaurante/auth/propietario")
+@RequestMapping("/api/v1/plazoleta/auth/propietario")
 @RequiredArgsConstructor
 public class PropietarioController {
 
     private final UsuariosClient usuariosClient;
 
 
-    @PostMapping("/createEmpleado")
+    @PostMapping("/crearEmpleado")
     @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
     public ResponseEntity<Void> saveEmpleado(@Valid @RequestBody Usuarios  usuarios) {
-        Rol rol = usuariosClient.findByNombre("ROLE_EMPLEADO");
-        if(rol == null){return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);}
-
         try {
+            Rol rol = usuariosClient.findByNombre("ROLE_EMPLEADO");
             usuarios.setRol(rol);
             usuariosClient.saveUsuario(usuarios);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }catch (Exception e) {
 
-            throw new NoDataFoundException();
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 
         }
 
     }
+
+
 }

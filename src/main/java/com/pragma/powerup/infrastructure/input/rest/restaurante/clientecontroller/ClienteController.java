@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 @RestController
-@RequestMapping("/api/v1/restaurante/auth/cliente")
+@RequestMapping("/api/v1/plazoleta/auth/cliente")
 @RequiredArgsConstructor
 public class ClienteController {
 
@@ -38,7 +38,7 @@ public class ClienteController {
                             array = @ArraySchema(schema = @Schema(implementation = RestauranteResponseDto.class)))),
             @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
     })
-    @GetMapping("/paginados")
+    @GetMapping("/listarRestaurantesPaginados")
     @PreAuthorize("hasRole('ROLE_CLIENTE')")
     public ResponseEntity<List<RestauranteResponseClienteDto>> getAllRestaurantesPaginados(@RequestParam("page") int page,
                                                                                            @RequestParam("size") int size) {
@@ -48,22 +48,16 @@ public class ClienteController {
 
 
 
-    @PostMapping("/createCliente")
+    @PostMapping("/crearCliente")
     public ResponseEntity<Void> saveCliente(@Valid @RequestBody Usuarios usuarios) {
-        Rol rol = usuariosClient.findByNombre("ROLE_CLIENTE");
-        if(rol == null){return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);}
-
         try {
+            Rol rol = usuariosClient.findByNombre("ROLE_CLIENTE");
             usuarios.setRol(rol);
             usuariosClient.saveUsuario(usuarios);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }catch (Exception e) {
-
-            throw new NoDataFoundException();
-
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-
     }
-
 
 }

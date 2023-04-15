@@ -19,6 +19,7 @@ import com.pragma.powerup.domain.model.Codigo;
 import com.pragma.powerup.domain.model.Estados;
 import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.client.UsuariosClient;
 import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.modelsmicroservice.Usuarios;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.twilio.clientwilio.TwilioClient;
 import com.pragma.powerup.infrastructure.out.jpa.microservicios.twilio.service.SMSService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ import javax.validation.Valid;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/v1/restaurante/auth/cliente")
+@RequestMapping("/api/v1/plazoleta/auth/cliente")
 @RequiredArgsConstructor
 public class ClienteControllerPedido {
 
@@ -45,96 +46,113 @@ public class ClienteControllerPedido {
     private final IRestauranteResponseMapper  restauranteResponseMapper;
 
     private final UsuariosClient usuariosClient;
+    private final TwilioClient twilioClient;
     private final SMSService smsService;
 
-
-    @PostMapping("/createPedido")
+    @GetMapping("/conectado")
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
+    public String twilio(){
+        return twilioClient.getPrueba();
+    }
+    @PostMapping("/crearPedido")
     @PreAuthorize("hasRole('ROLE_CLIENTE')")
     public ResponseEntity<Void> savePedido(@Valid @RequestBody PedidoPlatoRequestGuardar pedidoPlatoRequestGuardar)
             throws Exception {
 
+        try {
 
-        Usuarios cliente =  usuariosClient.findById(pedidoPlatoRequestGuardar.getIdCliente());
+            Usuarios cliente =  usuariosClient.findById(pedidoPlatoRequestGuardar.getIdCliente());
 
-        RestauranteResponseDto restaurante = restauranteHandler
-                .findByNombre(pedidoPlatoRequestGuardar.getIdRestaurante().getNombre());
+            RestauranteResponseDto restaurante = restauranteHandler
+                    .findByNombre(pedidoPlatoRequestGuardar.getIdRestaurante().getNombre());
 
-        PlatoResponseDto platoAGuardar = platosHandler.findById(pedidoPlatoRequestGuardar.getPlato().getId());
+            PlatoResponseDto platoAGuardar = platosHandler.findById(pedidoPlatoRequestGuardar.getPlato().getId());
 
-        if (restaurante == null || cliente == null ) {
-            throw  new DomainException("No se Puede Realizar el pedido ");
-        }
-
-        if(platoAGuardar.getRestaurante().getNombre() != restaurante.getNombre()){
-            throw  new DomainException("El plato no pertenece al restaurante ");
-        }
-
-
-        List<Estados> estados = new ArrayList<Estados>();
-        estados.add(Estados.PENDIENTE);
-        estados.add(Estados.EN_PREPARACION);
-        estados.add(Estados.LISTO);
-
-
-        for (Estados estado : estados ){
-            PedidoResponseDto pedidoCliente = pedidosHandler.findPedidoCliente(cliente.getId(), estado);
-            if ( pedidoCliente!=null){
-                throw  new DomainException("No se Puede Realizar el pedido porque tienes un pedido en estado " + estado);
+            if (restaurante == null ||
+                    cliente.getRol().getId()  != 4 ||
+                    pedidoPlatoRequestGuardar.getCantidad() <= 0) {
+                throw  new DomainException("No se Puede Realizar el pedido ");
             }
-        }
+
+            if(platoAGuardar.getRestaurante().getNombre() != restaurante.getNombre()){
+                throw  new DomainException("El plato no pertenece al restaurante ");
+            }
+
+            List<Estados> estados = new ArrayList<Estados>();
+            estados.add(Estados.PENDIENTE);
+            estados.add(Estados.EN_PREPARACION);
+            estados.add(Estados.LISTO);
 
 
-        if(restaurante != null && cliente != null){
-            //guardar pedido
-            PedidoRequestDto pedido = new PedidoRequestDto();
-            pedido.setIdRestaurante(restauranteResponseMapper.toRestauranteModel(restaurante));
-            pedido.setEstado(Estados.PENDIENTE);
-            pedido.setIdCliente(cliente.getId());
-            PedidoResponseDto pedidoAGuardar = pedidosHandler.savePedido(pedido);
+            for (Estados estado : estados ){
+                PedidoResponseDto pedidoCliente = pedidosHandler.findPedidoCliente(cliente.getId(), estado);
+                if ( pedidoCliente!=null){
+                    throw  new DomainException("No se Puede Realizar el pedido porque tienes un pedido en estado " + estado);
+                }
+            }
 
-            // guardar pedidos_platos
-            PedidoPlatoRequestDto pedidosPlatos = new PedidoPlatoRequestDto();
-            pedidosPlatos.setIdPedido(pedidoResponseMapper.toPedidoModel(pedidoAGuardar));
-            pedidosPlatos.setIdPlato(platoResponseMapper.toPlatoModel(platoAGuardar));
-            pedidosPlatos.setCantidad(pedidoPlatoRequestGuardar.getCantidad());
-            pedidosPlatosHandler.savePedidosPlatos(pedidosPlatos);
+            if(restaurante != null && cliente != null){
+                //guardar pedido
+                PedidoRequestDto pedido = new PedidoRequestDto();
+                pedido.setIdRestaurante(restauranteResponseMapper.toRestauranteModel(restaurante));
+                pedido.setEstado(Estados.PENDIENTE);
+                pedido.setIdCliente(cliente.getId());
+                PedidoResponseDto pedidoAGuardar = pedidosHandler.savePedido(pedido);
 
-            return  new ResponseEntity<>(HttpStatus.OK);
+                // guardar pedidos_platos
+                PedidoPlatoRequestDto pedidosPlatos = new PedidoPlatoRequestDto();
+                pedidosPlatos.setIdPedido(pedidoResponseMapper.toPedidoModel(pedidoAGuardar));
+                pedidosPlatos.setIdPlato(platoResponseMapper.toPlatoModel(platoAGuardar));
+                pedidosPlatos.setCantidad(pedidoPlatoRequestGuardar.getCantidad());
+                pedidosPlatosHandler.savePedidosPlatos(pedidosPlatos);
+
+                return  new ResponseEntity<>(HttpStatus.OK);
+            }
+        }catch (Exception e){
+
+            return  new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
         return  new ResponseEntity<>(HttpStatus.CONFLICT);
-
-
     }
 
 
     @PostMapping("/agregarPlatoPedido/{idCliente}")
     @PreAuthorize("hasRole('ROLE_CLIENTE')")
     public   ResponseEntity<Void> agregarPlatoPedido(@Valid @PathVariable Long idCliente,@RequestBody PedidoPlatoRequestDto pedidoPlatoRequestDto){
-        Usuarios cliente =  usuariosClient.findById(idCliente);
 
-        PlatoResponseDto platoAGuardar = platosHandler.findById(pedidoPlatoRequestDto.getIdPlato().getId());
+        try{
 
-        PedidoResponseDto pedidoCliente = pedidosHandler.findPedidoCliente(cliente.getId(), Estados.PENDIENTE);
+            Usuarios cliente =  usuariosClient.findById(idCliente);
 
-        if(cliente == null){throw  new DomainException("El cliente no existe");}
-        else if (platoAGuardar == null){throw new DomainException("El plato no existe");}
-        else if (pedidoPlatoRequestDto.getCantidad()<0){throw new DomainException("la cantidad del plato no puede ser 0");}
+            PlatoResponseDto platoAGuardar = platosHandler.findById(pedidoPlatoRequestDto.getIdPlato().getId());
 
-        if ( pedidoCliente!=null &&  pedidoCliente.getIdCliente() == cliente.getId()){
+            PedidoResponseDto pedidoCliente = pedidosHandler.findPedidoCliente(cliente.getId(), Estados.PENDIENTE);
 
-        // guardar nuevo plato al pedido
-            PedidoPlatoRequestDto pedidosPlatosNuevo = new PedidoPlatoRequestDto();
-            pedidosPlatosNuevo.setIdPedido(pedidoResponseMapper.toPedidoModel(pedidoCliente));
-            pedidosPlatosNuevo.setIdPlato(platoResponseMapper.toPlatoModel(platoAGuardar));
-            pedidosPlatosNuevo.setCantidad(pedidoPlatoRequestDto.getCantidad());
-            pedidosPlatosHandler.savePedidosPlatos(pedidosPlatosNuevo);
+            if (platoAGuardar == null){throw new DomainException("El plato no existe");}
+            else if (pedidoPlatoRequestDto.getCantidad()<0){throw new DomainException("la cantidad del plato no puede ser 0");}
 
-            return  new ResponseEntity<>(HttpStatus.OK);
+            if ( pedidoCliente!=null &&  pedidoCliente.getIdCliente() == cliente.getId() &&
+                    platoAGuardar.getRestaurante().getId() == pedidoCliente.getIdRestaurante().getId()){
 
+                // guardar nuevo plato al pedido
+                PedidoPlatoRequestDto pedidosPlatosNuevo = new PedidoPlatoRequestDto();
+                pedidosPlatosNuevo.setIdPedido(pedidoResponseMapper.toPedidoModel(pedidoCliente));
+                pedidosPlatosNuevo.setIdPlato(platoResponseMapper.toPlatoModel(platoAGuardar));
+                pedidosPlatosNuevo.setCantidad(pedidoPlatoRequestDto.getCantidad());
+                pedidosPlatosHandler.savePedidosPlatos(pedidosPlatosNuevo);
+
+                return  new ResponseEntity<>(HttpStatus.OK);
+
+            }
+
+
+        }catch (Exception e){
+            return  new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-        return  new ResponseEntity<>(HttpStatus.CONFLICT);
 
-        }
+        return  new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    }
+
 
     @DeleteMapping("/cancelarPedido/{idCliente}/{idPedido}")
     @PreAuthorize("hasRole('ROLE_CLIENTE')")
