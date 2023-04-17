@@ -15,12 +15,10 @@ import com.pragma.powerup.application.mapper.pedido.IPedidoResponseMapper;
 import com.pragma.powerup.application.mapper.platos.IPlatoResponseMapper;
 import com.pragma.powerup.application.mapper.restaurante.IRestauranteResponseMapper;
 import com.pragma.powerup.domain.exception.DomainException;
-import com.pragma.powerup.domain.model.Codigo;
 import com.pragma.powerup.domain.model.Estados;
 import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.client.UsuariosClient;
 import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.modelsmicroservice.Usuarios;
 import com.pragma.powerup.infrastructure.out.jpa.microservicios.twilio.clientwilio.TwilioClient;
-import com.pragma.powerup.infrastructure.out.jpa.microservicios.twilio.service.SMSService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,13 +45,11 @@ public class ClienteControllerPedido {
 
     private final UsuariosClient usuariosClient;
     private final TwilioClient twilioClient;
-    private final SMSService smsService;
 
-    @GetMapping("/conectado")
-    @PreAuthorize("hasRole('ROLE_CLIENTE')")
-    public String twilio(){
-        return twilioClient.getPrueba();
-    }
+
+
+
+
     @PostMapping("/crearPedido")
     @PreAuthorize("hasRole('ROLE_CLIENTE')")
     public ResponseEntity<Void> savePedido(@Valid @RequestBody PedidoPlatoRequestGuardar pedidoPlatoRequestGuardar)
@@ -157,46 +153,46 @@ public class ClienteControllerPedido {
     @DeleteMapping("/cancelarPedido/{idCliente}/{idPedido}")
     @PreAuthorize("hasRole('ROLE_CLIENTE')")
     public Object eliminarPorPorId(@PathVariable Long idCliente ,@PathVariable Long idPedido ) {
+        try{
+            Map<String, Object> response = new HashMap<>();
+            Usuarios cliente = usuariosClient.findById(idCliente);
 
-        Map<String, Object> response = new HashMap<>();
-        String Sms = "Lo sentimos, tu pedido ya esta en preparacion y no puede cancelarse ";
+            PedidoResponseDto pedidoExitente = pedidosHandler.findById(idPedido);
 
-        Usuarios cliente = usuariosClient.findById(idCliente);
-
-        PedidoResponseDto pedidoExitente = pedidosHandler.findById(idPedido);
-
-        if (cliente == null) {
-            response.put("menssage", "El  Cliente No Se Existe");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-
-        if (pedidoExitente == null) {
-            response.put("menssage", "El  pedido No Se Existe");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-
-        if (pedidoExitente.getIdCliente() == cliente.getId()) {
-            if (pedidoExitente.getEstado() == Estados.PENDIENTE) {
-
-               List<PedidoPlatoResponseDto> pedidosPlatosAEliminar = pedidosPlatosHandler
-                       .findAll(pedidoExitente.getId());
-
-                for(PedidoPlatoResponseDto eliminar: pedidosPlatosAEliminar){
-                     pedidosPlatosHandler.eliminarPedidoPlato(eliminar.getIdPedidosPlatos());
-                }
-
-                pedidosHandler.DeletePedido(pedidoExitente.getId());
-                response.put("menssage", "Eliminado");
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } else {
-                smsService.sendSms("+573245768037", Sms);
-                response.put("menssage", "Lo sentimos, tu pedido ya esta en preparacion y no puede cancelarse");
-                return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+            if (cliente == null) {
+                response.put("menssage", "El  Cliente No Se Existe");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
 
+            if (pedidoExitente == null) {
+                response.put("menssage", "El  pedido No Se Existe");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+
+            if (pedidoExitente.getIdCliente() == cliente.getId()) {
+                if (pedidoExitente.getEstado() == Estados.PENDIENTE) {
+
+                    List<PedidoPlatoResponseDto> pedidosPlatosAEliminar = pedidosPlatosHandler
+                            .findAll(pedidoExitente.getId());
+
+                    for(PedidoPlatoResponseDto eliminar: pedidosPlatosAEliminar){
+                        pedidosPlatosHandler.eliminarPedidoPlato(eliminar.getIdPedidosPlatos());
+                    }
+
+                    pedidosHandler.DeletePedido(pedidoExitente.getId());
+                    response.put("menssage", "Eliminado");
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                } else {
+                    twilioClient.enviarSmsNoCancelarPedido();
+                    response.put("menssage", "Lo sentimos, tu pedido ya esta en preparacion y no puede cancelarse");
+                    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                }
+
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        response.put("menssage", "Usted no es el dueño del pedido");
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
     }
 }

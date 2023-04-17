@@ -13,11 +13,9 @@ import com.pragma.powerup.application.mapper.pedidoplatos.IPedidoPlatosResponseM
 import com.pragma.powerup.domain.model.Codigo;
 import com.pragma.powerup.domain.model.Estados;
 import com.pragma.powerup.infrastructure.exception.NoDataFoundException;
-import com.pragma.powerup.infrastructure.exceptionhandler.ControllerAdvisor;
-import com.pragma.powerup.infrastructure.exceptionhandler.ExceptionResponse;
 import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.client.UsuariosClient;
 import com.pragma.powerup.infrastructure.out.jpa.microservicios.feing.modelsmicroservice.Usuarios;
-import com.pragma.powerup.infrastructure.out.jpa.microservicios.twilio.service.SMSService;
+import com.pragma.powerup.infrastructure.out.jpa.microservicios.twilio.clientwilio.TwilioClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +34,7 @@ public class EmpleadoPedidoController {
     private final IPedidosPlatosHandler pedidosPlatosHandler;
     private final IPedidosHandler pedidosHandler;
     private final UsuariosClient usuariosClient;
-    private final SMSService smsService;
+    private final TwilioClient twilioClient;
     private final IPedidoPlatosResponseMapper pedidoPlatosResponseMapper;
     private final IPedidoResponseMapper pedidoResponseMapper;
 
@@ -127,7 +125,8 @@ public class EmpleadoPedidoController {
             Usuarios empleado = usuariosClient.findById(idEmpleado);
 
 
-            if(restauranteEmpleado == null  || estado == null || empleado == null){
+            if(restauranteEmpleado == null  || estado == null || empleado == null ||
+                    estado.name() != Estados.EN_PREPARACION.name() ){
                 throw  new NoDataFoundException();
             }
 
@@ -144,7 +143,8 @@ public class EmpleadoPedidoController {
                         pedido.setEstado(Estados.LISTO);
                         pedidosHandler.savePedido(
                                 pedidoResponseMapper.toPedidoRequestDto(pedido));
-                        smsService.sendSms("+573245768037",mensaje);
+                        //ACA VA TWILIO
+                        twilioClient.enviarSmsPedidoListo();
 
                     }
                 }
@@ -152,7 +152,7 @@ public class EmpleadoPedidoController {
             return ResponseEntity.ok(pedidos);
 
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -167,41 +167,47 @@ public class EmpleadoPedidoController {
                                                        @RequestParam("size") int size,
                                                        @RequestBody PedidoRequestCambiarEstadoYSms requestDto)
     {
+        try {
+            Usuarios empleado = usuariosClient.findById(idEmpleado);
+            RestauranteEmpleadoResponseDto restauranteEmpleado = restauranteEmpleadoHandler.findById(idEmpleado);
 
-        Usuarios empleado = usuariosClient.findById(idEmpleado);
-        RestauranteEmpleadoResponseDto restauranteEmpleado = restauranteEmpleadoHandler.findById(idEmpleado);
+            if(restauranteEmpleado == null  || estado == null || empleado == null   ){
+                throw  new NoDataFoundException();
+            }
+            if(estado != Estados.LISTO){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
 
-        if(restauranteEmpleado == null  || estado == null || empleado == null   ){
-            throw  new NoDataFoundException();
-        }
-        if(estado != Estados.LISTO){
-           return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+            if((Codigo) requestDto.getCodigo() != Codigo.POWERUPV2){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        if((Codigo) requestDto.getCodigo() != Codigo.POWERUPV2){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-        }
-
-
-        List<PedidoResponseDto> pedidos = pedidosHandler.findAllPedidosPendientesPaginados(
-                page,size,estado,restauranteEmpleado.getIdRestaurante(),empleado.getId()
-        );
+            }
 
 
-        for(PedidoResponseDto pedido : pedidos)
-        {
-            for (Long id : requestDto.getIdPedido())
+            List<PedidoResponseDto> pedidos = pedidosHandler.findAllPedidosPendientesPaginados(
+                    page,size,estado,restauranteEmpleado.getIdRestaurante(),empleado.getId()
+            );
+
+
+            for(PedidoResponseDto pedido : pedidos)
             {
-                if(pedido.getId() == id && (Estados) pedido.getEstado() == Estados.LISTO ){
-                    pedido.setEstado(Estados.ENTREGADO);
-                    pedidosHandler.savePedido(
-                            pedidoResponseMapper.toPedidoRequestDto(pedido));
+                for (Long id : requestDto.getIdPedido())
+                {
+                    if(pedido.getId() == id && (Estados) pedido.getEstado() == Estados.LISTO ){
+                        pedido.setEstado(Estados.ENTREGADO);
+                        pedidosHandler.savePedido(
+                                pedidoResponseMapper.toPedidoRequestDto(pedido));
+                    }
                 }
             }
+
+            return ResponseEntity.ok(pedidos);
+        }catch (Exception e){
+            return new  ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.ok(pedidos);
+
+
     }
 
 

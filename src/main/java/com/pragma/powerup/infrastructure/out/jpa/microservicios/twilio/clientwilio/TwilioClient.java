@@ -11,6 +11,5 @@ public interface TwilioClient {
     @GetMapping("/noCancelarPedido")
     public String enviarSmsNoCancelarPedido();
 
-    @GetMapping("/prueba")
-    public String getPrueba();
+
 }
