@@ -1,5 +1,6 @@
 package com.pragma.powerup.domain.usecase.platos;
 
+import com.pragma.powerup.application.handler.factory.FactoryPlatosData;
 import com.pragma.powerup.domain.model.Categoria;
 import com.pragma.powerup.domain.model.Platos;
 import com.pragma.powerup.domain.model.Restaurante;
@@ -36,21 +37,9 @@ class PlatosUseCaseTest {
     @BeforeEach
     void setUp() {
 
-        restaurante = new Restaurante();
-        restaurante.setId(1L);
-        categoria = new Categoria();
-        categoria.setId(1L);
-
-
-        plato = new Platos();
-        plato.setId(1L);
-        plato.setNombre("pastas");
-        plato.setDescripcion("pastas doria");
-        plato.setPrecio(20000L);
-        plato.setUrlImagen("http://www.img.com");
-        plato.setActivo(true);
-        plato.setRestaurante(restaurante);
-        plato.setCategoria(categoria);
+        restaurante = FactoryPlatosData.platosData().getRestaurante();
+        categoria = FactoryPlatosData.categoriaData();
+        plato = FactoryPlatosData.platosData();
 
     }
 

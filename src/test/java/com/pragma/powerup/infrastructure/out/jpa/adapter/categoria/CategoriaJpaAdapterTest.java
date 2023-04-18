@@ -1,5 +1,6 @@
 package com.pragma.powerup.infrastructure.out.jpa.adapter.categoria;
 
+import com.pragma.powerup.application.handler.factory.FactoryCategoriaData;
 import com.pragma.powerup.domain.model.Categoria;
 import com.pragma.powerup.infrastructure.out.jpa.entity.CategoriaEntity;
 import com.pragma.powerup.infrastructure.out.jpa.mapper.categoria.ICategoriaEntityMapper;
@@ -34,15 +35,8 @@ class CategoriaJpaAdapterTest {
     @BeforeEach
     void setup() {
 
-        categoria = new Categoria();
-        categoria.setId(1L);
-        categoria.setNombre("arroz");
-        categoria.setDescripcion("arroz variado");
-
-        categoriaEntity = new CategoriaEntity();
-        categoriaEntity.setId(1L);
-        categoriaEntity.setNombre("arroz");
-        categoriaEntity.setDescripcion("arroz variado");
+        categoria = FactoryCategoriaData.getCategoriaData();
+        categoriaEntity = FactoryCategoriaData.categoriaEntityData();
 
     }
 

@@ -1,5 +1,7 @@
 package com.pragma.powerup.infrastructure.out.jpa.adapter.platos;
 
+import com.pragma.powerup.application.handler.factory.FactoryPedidoData;
+import com.pragma.powerup.application.handler.factory.FactoryPlatosData;
 import com.pragma.powerup.domain.model.*;
 import com.pragma.powerup.infrastructure.out.jpa.entity.CategoriaEntity;
 import com.pragma.powerup.infrastructure.out.jpa.entity.PedidoEntity;
@@ -50,38 +52,12 @@ class PlatosJpaAdapterTest {
 
     @BeforeEach
     void setUp() {
-        restaurante = new Restaurante();
-        restaurante.setId(1L);
-        categoria = new Categoria();
-        categoria.setId(1L);
-
-        restauranteEntity = new RestauranteEntity();
-        restauranteEntity.setId(1L);
-
-        categoriaEntity = new CategoriaEntity();
-        categoriaEntity.setId(1L);
-
-
-
-        plato = new Platos();
-        plato.setId(1L);
-        plato.setNombre("pastas");
-        plato.setDescripcion("pastas doria");
-        plato.setPrecio(20000L);
-        plato.setUrlImagen("http://www.img.com");
-        plato.setActivo(true);
-        plato.setRestaurante(restaurante);
-        plato.setCategoria(categoria);
-
-        platosEntity = new PlatosEntity();
-        platosEntity.setId(1L);
-        platosEntity.setNombre("pastas");
-        platosEntity.setDescripcion("pastas doria");
-        platosEntity.setPrecio(20000L);
-        platosEntity.setUrlImagen("http://www.img.com");
-        platosEntity.setActivo(true);
-        platosEntity.setRestaurante(restauranteEntity);
-        platosEntity.setCategoria(categoriaEntity);
+        restaurante = FactoryPedidoData.getRestauranteData();
+        categoria = FactoryPlatosData.categoriaData();
+        plato = FactoryPlatosData.platosData();
+        restauranteEntity = FactoryPedidoData.restauranteEntityData();
+        categoriaEntity = FactoryPlatosData.categoriaEntityData();
+        platosEntity = FactoryPlatosData.platosEntityData();
 
 
     }

@@ -3,6 +3,8 @@ package com.pragma.powerup.application.handler.pedidosplatos.imp;
 import com.pragma.powerup.application.dto.pedidoplatos.request.PedidoPlatoRequestDto;
 import com.pragma.powerup.application.dto.pedidoplatos.request.PedidoPlatoRequestGuardar;
 import com.pragma.powerup.application.dto.pedidoplatos.response.PedidoPlatoResponseDto;
+import com.pragma.powerup.application.handler.factory.FactoryPedidoData;
+import com.pragma.powerup.application.handler.factory.FactoryPedidosPlatosData;
 import com.pragma.powerup.application.mapper.pedidoplatos.IPedidoPlatosRequestMapper;
 import com.pragma.powerup.application.mapper.pedidoplatos.IPedidoPlatosResponseMapper;
 import com.pragma.powerup.domain.api.pedidosplatos.IPedidosPlatosServicePort;
@@ -35,8 +37,6 @@ class PedidosPlatosImpTest {
     @Mock
     private  IPedidoPlatosRequestMapper pedidoPlatosRequestMapper;
 
-
-    private PedidoPlatoRequestGuardar pedidoPlatoRequestGuardar;
     private PedidoPlatoRequestDto pedidoPlatoRequestDto;
 
     private PedidoPlatoResponseDto pedidoPlatoResponseDto;
@@ -49,43 +49,13 @@ class PedidosPlatosImpTest {
 
     @BeforeEach
     void setUp() {
-        restaurante = new Restaurante();
-        restaurante.setId(1L);
+        restaurante = FactoryPedidoData.getRestauranteData();
+        pedido = FactoryPedidosPlatosData.getPedidoData();
+        plato = FactoryPedidosPlatosData.getPlatoData();
+        pedidosPlatos = FactoryPedidosPlatosData.getPedidosPlatosData();
+        pedidoPlatoRequestDto = FactoryPedidosPlatosData.pedidoPlatoRequestDtoData();
+        pedidoPlatoResponseDto = FactoryPedidosPlatosData.pedidoPlatoResponseDtoData();
 
-        pedido = new Pedido();
-        pedido.setId(1L);
-
-        plato = new Platos();
-        plato.setId(1L);
-
-        pedidosPlatos = new PedidosPlatos();
-        pedidosPlatos.setIdPedidosPlatos(1L);
-        pedidosPlatos.setIdPedido(pedido);
-        pedidosPlatos.setIdPlato(plato);
-        pedidosPlatos.setCantidad(1);
-
-        pedidoPlatoRequestDto = new PedidoPlatoRequestDto();
-        pedidoPlatoRequestDto.setIdPedidosPlatos(1L);
-        pedidoPlatoRequestDto.setIdPedido(pedido);
-        pedidoPlatoRequestDto.setIdPlato(plato);
-        pedidoPlatoRequestDto.setCantidad(1);
-
-
-        pedidoPlatoResponseDto = new PedidoPlatoResponseDto();
-        pedidoPlatoResponseDto.setIdPedidosPlatos(1L);
-        pedidoPlatoResponseDto.setIdPedido(pedido);
-        pedidoPlatoResponseDto.setIdPlato(plato);
-        pedidoPlatoResponseDto.setCantidad(1);
-
-        pedidoPlatoRequestGuardar = new PedidoPlatoRequestGuardar();
-        pedidoPlatoRequestGuardar.setId(1L);
-        pedidoPlatoRequestGuardar.setEstado(Estados.PENDIENTE);
-        pedidoPlatoRequestGuardar.setFecha(DateTime.now().toDate());
-        pedidoPlatoRequestGuardar.setIdRestaurante(restaurante);
-        pedidoPlatoRequestGuardar.setIdCliente(1L);
-        pedidoPlatoRequestGuardar.setIdChef(1L);
-        pedidoPlatoRequestGuardar.setPlato(plato);
-        pedidoPlatoRequestGuardar.setCantidad(1);
 
     }
     @Test

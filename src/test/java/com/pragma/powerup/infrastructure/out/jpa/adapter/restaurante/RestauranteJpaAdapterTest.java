@@ -1,5 +1,6 @@
 package com.pragma.powerup.infrastructure.out.jpa.adapter.restaurante;
 
+import com.pragma.powerup.application.handler.factory.FactoryRestauranteData;
 import com.pragma.powerup.domain.model.Estados;
 import com.pragma.powerup.domain.model.Pedido;
 import com.pragma.powerup.domain.model.Platos;
@@ -43,27 +44,8 @@ class RestauranteJpaAdapterTest {
 
     @BeforeEach
     void setUp() {
-
-        restaurante = new Restaurante();
-        restaurante.setId(1L);
-        restaurante.setNombre("el manjar");
-        restaurante.setDireccion("cr6a 55");
-        restaurante.setIdPropietario(1L);
-        restaurante.setTelefono("2233223");
-        restaurante.setUrlLogo("www.logo.com");
-        restaurante.setNit(22343L);
-
-
-        restauranteEntity = new RestauranteEntity();
-        restauranteEntity.setId(1L);
-        restauranteEntity.setNombre("el manjar");
-        restauranteEntity.setDireccion("cr6a 55");
-        restauranteEntity.setIdPropietario(1L);
-        restauranteEntity.setTelefono("2233223");
-        restauranteEntity.setUrlLogo("www.logo.com");
-        restauranteEntity.setNit(22343L);
-
-
+        restaurante = FactoryRestauranteData.restauranteData();
+        restauranteEntity = FactoryRestauranteData.restauranteEntityData();
 
     }
 

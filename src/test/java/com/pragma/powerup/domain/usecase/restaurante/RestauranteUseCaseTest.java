@@ -1,5 +1,6 @@
 package com.pragma.powerup.domain.usecase.restaurante;
 
+import com.pragma.powerup.application.handler.factory.FactoryRestauranteData;
 import com.pragma.powerup.domain.model.Restaurante;
 import com.pragma.powerup.domain.spi.restaurante.IRestaurantePersistencePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,14 +32,7 @@ class RestauranteUseCaseTest {
     private Restaurante restaurante;
     @BeforeEach
     void setUp() {
-        restaurante = new Restaurante();
-        restaurante.setId(1L);
-        restaurante.setNombre("el manjar");
-        restaurante.setDireccion("cr6a 55");
-        restaurante.setIdPropietario(1L);
-        restaurante.setTelefono("2233223");
-        restaurante.setUrlLogo("www.logo.com");
-        restaurante.setNit(22343L);
+        restaurante = FactoryRestauranteData.restauranteData();
     }
 
 

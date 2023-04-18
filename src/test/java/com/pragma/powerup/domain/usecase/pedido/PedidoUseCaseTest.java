@@ -1,5 +1,6 @@
 package com.pragma.powerup.domain.usecase.pedido;
 
+import com.pragma.powerup.application.handler.factory.FactoryPedidoData;
 import com.pragma.powerup.domain.model.Estados;
 import com.pragma.powerup.domain.model.Pedido;
 import com.pragma.powerup.domain.model.Restaurante;
@@ -36,10 +37,8 @@ class PedidoUseCaseTest {
     @BeforeEach
     void setUp() {
 
-        restaurante = new Restaurante();
-        restaurante.setId(1L);
-
-        pedido=new Pedido(1L, LocalDateTime.now(), Estados.PENDIENTE,restaurante,1L,1L);
+        restaurante = FactoryPedidoData.getRestauranteData();
+        pedido = FactoryPedidoData.getPedidoData();
     }
 
     @Test

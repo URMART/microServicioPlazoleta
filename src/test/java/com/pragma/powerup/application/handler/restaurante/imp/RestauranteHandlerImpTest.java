@@ -3,6 +3,7 @@ package com.pragma.powerup.application.handler.restaurante.imp;
 import com.pragma.powerup.application.dto.restaurante.request.RestauranteRequestDto;
 import com.pragma.powerup.application.dto.restaurante.response.RestauranteResponseClienteDto;
 import com.pragma.powerup.application.dto.restaurante.response.RestauranteResponseDto;
+import com.pragma.powerup.application.handler.factory.FactoryRestauranteData;
 import com.pragma.powerup.application.mapper.restaurante.IRestauranteRequestMapper;
 import com.pragma.powerup.application.mapper.restaurante.IRestauranteResponseMapper;
 import com.pragma.powerup.domain.api.restaurante.IRestauranteServicePort;
@@ -46,40 +47,10 @@ class RestauranteHandlerImpTest {
     @BeforeEach
     void setUp() {
 
-        restaurante = new Restaurante();
-        restaurante.setId(1L);
-        restaurante.setNombre("el manjar");
-        restaurante.setDireccion("cr6a 55");
-        restaurante.setIdPropietario(1L);
-        restaurante.setTelefono("2233223");
-        restaurante.setUrlLogo("www.logo.com");
-        restaurante.setNit(22343L);
-
-        restauranteResponseDto = new RestauranteResponseDto();
-        restauranteResponseDto.setId(1L);
-        restauranteResponseDto.setNombre("el manjar");
-        restauranteResponseDto.setDireccion("cr6a 55");
-        restauranteResponseDto.setIdPropietario(1L);
-        restauranteResponseDto.setTelefono("2233223");
-        restauranteResponseDto.setUrlLogo("www.logo.com");
-        restauranteResponseDto.setNit(22343L);
-
-
-        restauranteRequestDto = new RestauranteRequestDto();
-        restauranteRequestDto.setId(1L);
-        restauranteRequestDto.setNombre("el manjar");
-        restauranteRequestDto.setDireccion("cr6a 55");
-        restauranteRequestDto.setIdPropietario(1L);
-        restauranteRequestDto.setTelefono("2233223");
-        restauranteRequestDto.setUrlLogo("www.logo.com");
-        restauranteRequestDto.setNit(22343L);
-
-
-        restauranteResponseClienteDto = new RestauranteResponseClienteDto();
-        restauranteResponseClienteDto.setNombre("el manjar");
-        restauranteResponseClienteDto.setUrlLogo("www.logo.com");
-
-
+        restaurante = FactoryRestauranteData.restauranteData();
+        restauranteResponseDto = FactoryRestauranteData.restauranteResponseDtoData();
+        restauranteRequestDto = FactoryRestauranteData.restauranteRequestDtoData();
+        restauranteResponseClienteDto = FactoryRestauranteData.restauranteResponseClienteDtoData();
     }
 
     @Test

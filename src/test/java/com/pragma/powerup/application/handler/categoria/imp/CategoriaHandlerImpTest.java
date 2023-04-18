@@ -2,6 +2,7 @@ package com.pragma.powerup.application.handler.categoria.imp;
 
 import com.pragma.powerup.application.dto.categoria.request.CategoriaRequestDto;
 import com.pragma.powerup.application.dto.categoria.response.CategoriaResponseDto;
+import com.pragma.powerup.application.handler.factory.FactoryCategoriaData;
 import com.pragma.powerup.application.mapper.categoria.ICategoriaRequestMapper;
 import com.pragma.powerup.application.mapper.categoria.ICategoriaResponseMapper;
 import com.pragma.powerup.domain.api.categoria.ICategoriaServicePort;
@@ -30,15 +31,9 @@ class CategoriaHandlerImpTest {
 
     @BeforeEach
     void setUp() {
-        categoria = new Categoria();
-        categoria.setId(1L);
-        categoria.setNombre("arroz");
-        categoria.setDescripcion("arroz variado");
+        categoria = FactoryCategoriaData.getCategoriaData();
 
-        categoriaResponseDto = new CategoriaResponseDto();
-        categoriaResponseDto.setId(1L);
-        categoriaResponseDto.setNombre("arroz");
-        categoriaResponseDto.setDescripcion("arroz variado");
+        categoriaResponseDto = FactoryCategoriaData.getCategoriaResponseDto();
 
 
     }

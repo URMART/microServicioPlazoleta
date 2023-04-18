@@ -1,5 +1,6 @@
 package com.pragma.powerup.domain.usecase.restauranteempleado;
 
+import com.pragma.powerup.application.handler.factory.FactoryRestauranteEmpleadoData;
 import com.pragma.powerup.domain.model.RestauranteEmpleado;
 import com.pragma.powerup.domain.spi.restauranteempleado.IRestauranteEmpleadoPersistencePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,10 +30,7 @@ class RestauranteEmpleadoUseCaseTest {
     private RestauranteEmpleado restauranteEmpleado;
     @BeforeEach
     void setUp() {
-        restauranteEmpleado = new RestauranteEmpleado();
-        restauranteEmpleado.setId(1L);
-        restauranteEmpleado.setIdRestaurante(1L);
-        restauranteEmpleado.setIdEmpleado(1L);
+        restauranteEmpleado = FactoryRestauranteEmpleadoData.getRestauranteEmpleadoData();
 
     }
 

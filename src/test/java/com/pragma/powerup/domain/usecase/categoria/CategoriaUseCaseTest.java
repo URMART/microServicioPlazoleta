@@ -1,5 +1,6 @@
 package com.pragma.powerup.domain.usecase.categoria;
 
+import com.pragma.powerup.application.handler.factory.FactoryCategoriaData;
 import com.pragma.powerup.domain.model.Categoria;
 import com.pragma.powerup.domain.spi.categoria.ICategoriaPersistencePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,10 +25,7 @@ class CategoriaUseCaseTest {
     @BeforeEach
     void setUp() {
 
-        categoria = new Categoria();
-        categoria.setId(1L);
-        categoria.setNombre("arroz");
-        categoria.setDescripcion("arroz variado");
+        categoria = FactoryCategoriaData.getCategoriaData();
     }
 
     @Test

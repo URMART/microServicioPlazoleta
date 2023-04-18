@@ -1,6 +1,7 @@
 package com.pragma.powerup.infrastructure.out.jpa.adapter.restauranteempleado;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
+import com.pragma.powerup.application.handler.factory.FactoryRestauranteEmpleadoData;
 import com.pragma.powerup.domain.model.Platos;
 import com.pragma.powerup.domain.model.RestauranteEmpleado;
 import com.pragma.powerup.infrastructure.out.jpa.entity.RestauranteEmpleadoEntity;
@@ -35,18 +36,8 @@ class RestauranteEmpleadoJpaAdapterTest {
 
     @BeforeEach
     void setUp() {
-
-        restauranteEmpleado = new RestauranteEmpleado();
-        restauranteEmpleado.setId(1L);
-        restauranteEmpleado.setIdRestaurante(1L);
-        restauranteEmpleado.setIdEmpleado(1L);
-
-        restauranteEmpleadoEntity = new RestauranteEmpleadoEntity();
-        restauranteEmpleadoEntity.setId(1L);
-        restauranteEmpleadoEntity.setIdRestaurante(1L);
-        restauranteEmpleadoEntity.setIdEmpleado(1L);
-
-
+        restauranteEmpleado = FactoryRestauranteEmpleadoData.getRestauranteEmpleadoData();
+        restauranteEmpleadoEntity = FactoryRestauranteEmpleadoData.getRestauranteEmpleadoEntityData();
     }
 
     @Test

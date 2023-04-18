@@ -1,5 +1,6 @@
 package com.pragma.powerup.domain.usecase.pedidosplatos;
 
+import com.pragma.powerup.application.handler.factory.FactoryPedidosPlatosData;
 import com.pragma.powerup.domain.model.Estados;
 import com.pragma.powerup.domain.model.Pedido;
 import com.pragma.powerup.domain.model.PedidosPlatos;
@@ -35,17 +36,9 @@ class PedidosPlatosUseCaseTest {
     private PedidosPlatos pedidosPlatos;
     @BeforeEach
     void setUp() {
-        pedido = new Pedido();
-        pedido.setId(1L);
-
-        plato = new Platos();
-        plato.setId(1L);
-
-        pedidosPlatos = new PedidosPlatos();
-        pedidosPlatos.setIdPedidosPlatos(1L);
-        pedidosPlatos.setIdPedido(pedido);
-        pedidosPlatos.setIdPlato(plato);
-        pedidosPlatos.setCantidad(1);
+        pedido = FactoryPedidosPlatosData.getPedidoData();
+        plato = FactoryPedidosPlatosData.getPlatoData();
+        pedidosPlatos =FactoryPedidosPlatosData.getPedidosPlatosData();
     }
 
     @Test

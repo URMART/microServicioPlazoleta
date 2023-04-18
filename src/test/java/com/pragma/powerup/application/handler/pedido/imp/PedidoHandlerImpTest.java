@@ -2,6 +2,7 @@ package com.pragma.powerup.application.handler.pedido.imp;
 
 import com.pragma.powerup.application.dto.pedido.request.PedidoRequestDto;
 import com.pragma.powerup.application.dto.pedido.response.PedidoResponseDto;
+import com.pragma.powerup.application.handler.factory.FactoryPedidoData;
 import com.pragma.powerup.application.mapper.pedido.IPedidoRequestMapper;
 import com.pragma.powerup.application.mapper.pedido.IPedidoResponseMapper;
 import com.pragma.powerup.domain.api.pedido.IPedidoServicePort;
@@ -45,25 +46,10 @@ class PedidoHandlerImpTest {
     private Restaurante restaurante;
     @BeforeEach
     void setUp() {
-        restaurante = new Restaurante();
-        restaurante.setId(1L);
-        pedido=new Pedido(1L, LocalDateTime.now(), Estados.PENDIENTE,restaurante,1L,1L);
-
-        pedidoResponseDto = new PedidoResponseDto();
-        pedidoResponseDto.setId(1L);
-        pedidoResponseDto.setFecha(DateTime.now().toDate());
-        pedidoResponseDto.setEstado(Estados.PENDIENTE);
-        pedidoResponseDto.setIdRestaurante(restaurante);
-        pedidoResponseDto.setIdCliente(1L);
-        pedidoResponseDto.setIdChef(1L);
-
-        pedidoRequestDto = new PedidoRequestDto();
-        pedidoRequestDto.setId(1L);
-        pedidoRequestDto.setFecha(DateTime.now().toDate());
-        pedidoRequestDto.setEstado(Estados.PENDIENTE);
-        pedidoRequestDto.setIdRestaurante(restaurante);
-        pedidoRequestDto.setIdCliente(1L);
-        pedidoRequestDto.setIdChef(1L);
+        restaurante = FactoryPedidoData.getRestauranteData();
+        pedido= FactoryPedidoData.getPedidoData();
+        pedidoResponseDto = FactoryPedidoData.getPedidoResponseDtoData();
+        pedidoRequestDto = FactoryPedidoData.getPedidoRequestDtoData();
 
     }
 

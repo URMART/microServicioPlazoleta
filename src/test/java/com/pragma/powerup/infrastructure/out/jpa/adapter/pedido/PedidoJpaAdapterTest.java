@@ -1,5 +1,6 @@
 package com.pragma.powerup.infrastructure.out.jpa.adapter.pedido;
 
+import com.pragma.powerup.application.handler.factory.FactoryPedidoData;
 import com.pragma.powerup.domain.model.Estados;
 import com.pragma.powerup.domain.model.Pedido;
 import com.pragma.powerup.domain.model.Restaurante;
@@ -50,15 +51,10 @@ class PedidoJpaAdapterTest {
 
     @BeforeEach
     void setUp() {
-        restaurante = new Restaurante();
-        restaurante.setId(1L);
-
-        restauranteEntity = new RestauranteEntity();
-        restauranteEntity.setId(1L);
-
-        pedido=new Pedido(1L, LocalDateTime.now(), Estados.PENDIENTE,restaurante,1L,1L);
-
-        pedidoEntity=new PedidoEntity(1L, LocalDateTime.now(), Estados.PENDIENTE,restauranteEntity,1L,1L);
+        restaurante = FactoryPedidoData.getRestauranteData();
+        pedido=FactoryPedidoData.getPedidoData();
+        restauranteEntity = FactoryPedidoData.restauranteEntityData();
+        pedidoEntity=FactoryPedidoData.getPedidoEntityData();
 
 
     }

@@ -1,5 +1,7 @@
 package com.pragma.powerup.infrastructure.out.jpa.adapter.pedidosplatos;
 
+import com.pragma.powerup.application.handler.factory.FactoryCategoriaData;
+import com.pragma.powerup.application.handler.factory.FactoryPedidosPlatosData;
 import com.pragma.powerup.domain.model.Estados;
 import com.pragma.powerup.domain.model.Pedido;
 import com.pragma.powerup.domain.model.PedidosPlatos;
@@ -57,33 +59,12 @@ class PedidosPlatosJpaAdapterTest {
 
     @BeforeEach
     void setUp() {
-        pedido = new Pedido();
-        pedido.setId(1L);
-
-        pedidoEntity = new PedidoEntity();
-        pedidoEntity.setId(1L);
-
-        plato = new Platos();
-        plato.setId(1L);
-
-        platoEntity = new PlatosEntity();
-        platoEntity.setId(1L);
-
-        pedidosPlatos = new PedidosPlatos();
-        pedidosPlatos.setIdPedidosPlatos(1L);
-        pedidosPlatos.setIdPedido(pedido);
-        pedidosPlatos.setIdPlato(plato);
-        pedidosPlatos.setCantidad(1);
-
-        pedidosPlatosEntity = new PedidosPlatosEntity();
-        pedidosPlatosEntity.setIdPedidosPlatos(1L);
-        pedidosPlatosEntity.setIdPedido(pedidoEntity);
-        pedidosPlatosEntity.setIdPlato(platoEntity);
-        pedidosPlatosEntity.setCantidad(1);
-
-
-
-
+        pedido = FactoryPedidosPlatosData.getPedidoData();
+        plato = FactoryPedidosPlatosData.getPlatoData();
+        pedidoEntity = FactoryPedidosPlatosData.getPedidoEntityData();
+        platoEntity = FactoryPedidosPlatosData.getPlatoEntityData();
+        pedidosPlatos = FactoryPedidosPlatosData.getPedidosPlatosData();
+        pedidosPlatosEntity = FactoryPedidosPlatosData.getPedidosPlatosEntityData();
     }
 
     @Test

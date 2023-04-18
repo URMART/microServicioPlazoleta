@@ -2,6 +2,7 @@ package com.pragma.powerup.application.handler.restauranteempleado.imp;
 
 import com.pragma.powerup.application.dto.restauranteempleado.request.RestauranteEmpleadoRequestDto;
 import com.pragma.powerup.application.dto.restauranteempleado.response.RestauranteEmpleadoResponseDto;
+import com.pragma.powerup.application.handler.factory.FactoryRestauranteEmpleadoData;
 import com.pragma.powerup.application.mapper.restaurenteempleado.IRestauranteEmpleadoRequestMapper;
 import com.pragma.powerup.application.mapper.restaurenteempleado.IRestauranteEmpleadoResponseMapper;
 import com.pragma.powerup.domain.api.restauranteempleado.IRestauranteEmpleadoServicePort;
@@ -38,19 +39,9 @@ class RestauranteEmpleadoHandlerImpTest {
 
     @BeforeEach
     void setUp() {
-        restauranteEmpleado = new RestauranteEmpleado();
-        restauranteEmpleado.setId(1L);
-        restauranteEmpleado.setIdRestaurante(1L);
-        restauranteEmpleado.setIdEmpleado(1L);
-
-        restauranteEmpleadoRequestDto = new RestauranteEmpleadoRequestDto();
-        restauranteEmpleado.setIdRestaurante(1L);
-        restauranteEmpleado.setIdEmpleado(1L);
-
-        restauranteEmpleadoResponseDto = new RestauranteEmpleadoResponseDto();
-        restauranteEmpleadoResponseDto.setId(1L);
-        restauranteEmpleadoResponseDto.setIdRestaurante(1L);
-        restauranteEmpleadoResponseDto.setIdEmpleado(1L);
+        restauranteEmpleado = FactoryRestauranteEmpleadoData.getRestauranteEmpleadoData();
+        restauranteEmpleadoRequestDto = FactoryRestauranteEmpleadoData.restauranteEmpleadoRequestDtoData();
+        restauranteEmpleadoResponseDto = FactoryRestauranteEmpleadoData.restauranteEmpleadoResponseDtoData();
     }
 
     @Test
