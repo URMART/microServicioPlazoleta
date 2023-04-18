@@ -29,7 +29,6 @@ public class PedidoHandlerImp implements IPedidosHandler {
 
     @Override
     public PedidoResponseDto savePedido(PedidoRequestDto pedidoRequestDto) {
-        System.out.println("pedidoRequestDto en handler = " + pedidoRequestDto);
         return  pedidoResponseMapper.
                 toPedidoDto(pedidoServicePort.savePedido(pedidoRequestMapper.toPedido(pedidoRequestDto)));
     }

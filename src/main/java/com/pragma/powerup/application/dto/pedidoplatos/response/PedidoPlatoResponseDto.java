@@ -10,7 +10,6 @@ public class PedidoPlatoResponseDto {
 
     private Pedido idPedido;
 
-
     private Platos idPlato;
     private Integer cantidad;
 }

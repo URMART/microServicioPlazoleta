@@ -20,12 +20,8 @@ public class PedidosPlatosJpaAdapter implements IPedidosPlatosPersistencePort {
 
     @Override
     public void savePedidosPlatos(PedidosPlatos pedidosPlatos) {
-        System.out.println("pedidosPlatos  estoy en el adapter = " + pedidosPlatos);
-
        pedidosPlatosRepository.save(pedidosPlatosMapper.toPedidoPlatosEntity(pedidosPlatos));
 
-        System.out.println("pedidosPlatosMapper.toPedidoPlatosEntity(pedidosPlatos) = " + pedidosPlatosMapper.toPedidoPlatosEntity(pedidosPlatos));
-        
     }
 
 

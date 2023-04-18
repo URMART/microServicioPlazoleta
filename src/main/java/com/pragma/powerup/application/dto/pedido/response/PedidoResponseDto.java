@@ -2,6 +2,7 @@ package com.pragma.powerup.application.dto.pedido.response;
 
 import com.pragma.powerup.domain.model.Estados;
 import com.pragma.powerup.domain.model.Restaurante;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Date;
